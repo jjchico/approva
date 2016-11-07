@@ -1,0 +1,180 @@
+@CHARSET "UTF-8";
+html, body{ 
+	margin:0; 
+	padding:0; 
+	text-align:center; 
+	width:100%;
+	margin:auto;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#header{
+	text-align:center;
+	font-size:18px;
+    color:whitesmoke;
+	font-weight:bold;	
+	min-height:20px;
+	height:auto !important; 	
+	padding:0px;
+    background-color:cadetblue;
+}
+
+#header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+#header li {
+    font-size:12px;
+    float: left;
+}
+
+#header li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+#header li a:hover {
+    background-color: #111111;
+}
+
+#content{
+	font-size:12px;	
+	text-align:justify;
+	min-height:600px;
+	height:auto !important; 	
+}
+
+#left{
+    padding:2px;
+	width:20%;
+	float:left;
+	min-height:660px;
+	height:auto !important; 
+	background-color:darkseagreen;	
+    color:whitesmoke;
+}
+	#left select{
+		width:180px;
+	}
+#left a{
+        color:brown;
+        text-decoration: none;
+        font-size: 16px;
+    }
+#left a:hover{
+        color:black;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+
+	
+#center{
+
+	margin-left:21%;
+	min-height:660px;
+	height:auto !important; 
+	background-color:#FFFFFF;	
+	padding:2px;
+    text-align:justify;
+}
+
+    
+    #center textarea{
+        margin:auto;
+    }
+
+    #center select{
+        width:90%;
+        text-overflow: ellipsis;
+        margin:auto;
+    }
+
+
+#center h1{
+    text-align: center;
+}
+	
+#footer{
+	clear:both;
+	padding:0px;
+	text-align:center;
+	font-size:12px;
+    margin:auto;
+}
+
+#footer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+#footer li {
+    float: left;
+}
+
+#footer li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+#footer li a:hover {
+    background-color: #111111;
+}
+
+
+table{
+    width:99%;
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+    text-align: justify;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+table th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+
+.verticalText
+            {
+                text-align: center;
+                vertical-align: middle;
+                width: 20px;
+                margin: 0px;
+                padding: 0px;
+                padding-left: 3px;
+                padding-right: 3px;
+                padding-top: 10px;
+                white-space: nowrap;
+                -webkit-transform: rotate(-90deg); 
+                -moz-transform: rotate(-90deg);                 
+            }
+
+
+

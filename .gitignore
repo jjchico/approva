@@ -1,0 +1,7 @@
+.DS_Store
+# jpgraph
+*.old.*
+backup
+# This is site-dependent
+config.php
+.tags

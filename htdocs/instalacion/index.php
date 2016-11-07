@@ -8,10 +8,10 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 //forzamos codificación utf-8
@@ -19,7 +19,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 echo '<h3>Instalación inicial de la Plataforma de Evaluación approva ...</h3>';
 //config.php
-require('../config.php');       
+require('../config.php');
 //functions.php
 require('../functions.php');
 //connect
@@ -30,24 +30,24 @@ $mysqli = new mysqli(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD);
    $dbuser = 'root';
    $dbpass = '';
    $conn = mysqli_connect($dbhost, $dbuser, $dbpass);
-   
+
    if(! $conn ) {
       die('No se pudo conectar al servidor de base de datos: ' . mysqli_error());
    }
-*/   
-  
+*/
+
 
 //si venimos de dar de alta
 
 if(isset($_POST['username'])){
-    
+
 	//conexión dataBase
 	$con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
 	if (!$con_mysql)
 	{
 	die("Connection error: " . mysqli_connect_error());
 	}
-    
+
     $username=$_POST['username'];
     $password=sha1($_POST['password']);
     $sql="insert into user values(NULL,'$username','$password')";
@@ -56,25 +56,24 @@ if(isset($_POST['username'])){
         header("Location:../login.php?alta=si");
     }else{
         echo 'Hubo algún problema al proceder al registro inicial de usuario';
-    }    
+    }
 }
 
 //fin dar de alta
-   
-   $sql = 'CREATE Database approva';
+
+   $database = DB_DATABASE;
+   $sql = "CREATE Database $database";
    $retval = mysqli_query( $mysqli,$sql ) or die(mysqli_error());
-   
+
    if(! $retval ) {
       die('No se pudo crear la base de datos: ' . mysqli_error());
    }
-   
-   echo "La base de datos approva se ha creado";
+
+   echo "La base de datos $database se ha creado";
    echo '<br/>';
 
    //conexión a la base de datos
-   mysqli_select_db( $mysqli,'approva' );
-
-
+   mysqli_select_db( $mysqli, $database );
 
 
    ///////////////////////////////////////////////////creación de tablas
@@ -217,7 +216,7 @@ if(isset($_POST['username'])){
             echo '<br/>';
        }
 
-        
+
 echo '<hr>';
 
 
@@ -244,16 +243,3 @@ echo '</ul>';
 echo '</form>';
 
 ?>
-
-
-
-	
-	
-
-	
-
-	
-
-
-
-

@@ -8,18 +8,11 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
-
-//si venimos de la instalación inicial, tenemos que eliminar el directorio instalación
-if(isset($_GET['alta'])){
-    system("rm -rf ".escapeshellarg('instalacion'));
-    echo '<script>alert(\'Ya puede acceder a la Plataforma con este usuario y contraseña\');</script>';
-}
-//fin eliminar directorio instalación
 
 //if logout then destroy the session and redirect the user
 if(isset($_GET['logout']))
@@ -29,7 +22,7 @@ if(isset($_GET['logout']))
     	session_destroy();
     	session_write_close();
     	setcookie(session_name(),'',0,'/');
-    	session_regenerate_id(true);	
+    	session_regenerate_id(true);
 }
 
 ?>
@@ -56,10 +49,10 @@ if(isset($_GET['logout']))
 	<br/>
 	<br/>
 	<br/>
-	<br/>	
 	<br/>
 	<br/>
-		
+	<br/>
+
 	</form>
 </div>
 

@@ -19,41 +19,28 @@ header('Content-Type: text/html; charset=UTF-8');
 
 echo '<h3>Instalación inicial de la Plataforma de Evaluación approva ...</h3>';
 //config.php
-require('../config.php');
+require('config.php');
 //functions.php
-require('../functions.php');
+require('functions.php');
 //connect
 $mysqli = new mysqli(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD);
-
-/*
-   $dbhost = 'localhost';
-   $dbuser = 'root';
-   $dbpass = '';
-   $conn = mysqli_connect($dbhost, $dbuser, $dbpass);
-
-   if(! $conn ) {
-      die('No se pudo conectar al servidor de base de datos: ' . mysqli_error());
-   }
-*/
 
 
 //si venimos de dar de alta
 
 if(isset($_POST['username'])){
-
 	//conexión dataBase
 	$con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
-	if (!$con_mysql)
-	{
-	die("Connection error: " . mysqli_connect_error());
+	if (!$con_mysql) {
+		die("Connection error: " . mysqli_connect_error($con_mysql));
 	}
 
     $username=$_POST['username'];
     $password=sha1($_POST['password']);
     $sql="insert into user values(NULL,'$username','$password')";
-    $result=mysqli_query($con_mysql,$sql) or die(mysqli_error());
+    $result=mysqli_query($con_mysql,$sql) or die(mysqli_error($con_mysql));
     if($result){
-        header("Location:../login.php?alta=si");
+        header("Location:../login.php");
     }else{
         echo 'Hubo algún problema al proceder al registro inicial de usuario';
     }
@@ -61,19 +48,16 @@ if(isset($_POST['username'])){
 
 //fin dar de alta
 
-   $database = DB_DATABASE;
-   $sql = "CREATE Database $database";
-   $retval = mysqli_query( $mysqli,$sql ) or die(mysqli_error());
+$database = DB_DATABASE;
+$sql = "CREATE Database $database";
+$retval = mysqli_query($mysqli, $sql) or
+    die('No se pudo crear la base de datos: ' . mysqli_error($mysqli));
 
-   if(! $retval ) {
-      die('No se pudo crear la base de datos: ' . mysqli_error());
-   }
+echo "La base de datos $database se ha creado";
+echo '<br/>';
 
-   echo "La base de datos $database se ha creado";
-   echo '<br/>';
-
-   //conexión a la base de datos
-   mysqli_select_db( $mysqli, $database );
+//conexión a la base de datos
+mysqli_select_db($mysqli, $database);
 
 
    ///////////////////////////////////////////////////creación de tablas

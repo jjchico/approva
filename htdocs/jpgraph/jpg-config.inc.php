@@ -38,6 +38,8 @@
 // define('CACHE_DIR','/tmp/jpgraph_cache/');
 // define('TTF_DIR','/usr/share/fonts/TrueType/');
 // define('MBTTF_DIR','/usr/share/fonts/TrueType/');
+define('TTF_DIR','jpgraph/fonts/TrueType/');
+define('MBTTF_DIR','jpgraph/fonts/TrueType/');
 
 //-------------------------------------------------------------------------
 // Cache directory specification for use with CSIM graphs that are

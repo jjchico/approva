@@ -95,62 +95,99 @@ if (!$con_mysql)
                     for($c=0;$c<$numCalif;$c++){
                         $rowCalif=mysqli_fetch_array($resultCalif,MYSQLI_ASSOC);
                         echo '<tr>';
-                            echo '<td style="border:#000000 thin solid;">'.$rowCalif['estandar'].'</td>';
+                            echo '<td style="border:#000000 thin solid;">';
+                            echo $rowCalif['estandar'];
+                            if($rowCalif['ccl']<>0){echo ' CCL ';}
+                            if($rowCalif['cmct']<>0){echo ' CMCT ';}
+                            if($rowCalif['cd']<>0){echo ' CD ';}
+                            if($rowCalif['caa']<>0){echo ' CAA ';}
+                            if($rowCalif['csyc']<>0){echo ' CSYC ';}
+                            if($rowCalif['siep']<>0){echo ' SIEP ';}
+                            if($rowCalif['cec']<>0){echo ' CEC ';}
+                            echo '</td>';
                             echo '<td style="border:#000000 thin solid;text-align:center;">'.$rowCalif['calificacion'].'<br/>('.round((($rowCalif['calificacion']/$rowCalif['peso'])*100),2).')</td>';
                             $arrayCalif[]=$rowCalif['calificacion'];
-                            //multiplico la competencia por el peso del estándar
-                            $arrayCCL[]=$rowCalif['ccl']*$rowCalif['peso'];
-                            $arrayCMCT[]=$rowCalif['cmct']*$rowCalif['peso'];
-                            $arrayCAA[]=$rowCalif['cd']*$rowCalif['peso'];
-                            $arrayCD[]=$rowCalif['caa']*$rowCalif['peso'];
-                            $arrayCSYC[]=$rowCalif['csyc']*$rowCalif['peso'];
-                            $arraySIEP[]=$rowCalif['siep']*$rowCalif['peso'];
-                            $arrayCEC[]=$rowCalif['cec']*$rowCalif['peso'];
+                            //multiplico la competencia por el la calificación del estándar sobre 10
+                            if($rowCalif['ccl']<>0){
+                            $arrayCCL[]=$rowCalif['ccl']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['cmct']<>0){
+                            $arrayCMCT[]=$rowCalif['cmct']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['cd']<>0){
+                            $arrayCAA[]=$rowCalif['cd']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['caa']<>0){    
+                            $arrayCD[]=$rowCalif['caa']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['csyc']<>0){    
+                            $arrayCSYC[]=$rowCalif['csyc']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['siep']<>0){    
+                            $arraySIEP[]=$rowCalif['siep']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
+                            if($rowCalif['cec']<>0){    
+                            $arrayCEC[]=$rowCalif['cec']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
+                            }
                         echo '</tr>';
                     }//fin de for
                     echo '<tr>';
                     echo '<th style="border:#000000 thin solid;background-color:#cccccc;"><big><big>Calificación Total</big></big></th>';
-                    echo '<th style="border:#000000 thin solid;background-color:#cccccc;"><big><big>'.array_sum($arrayCalif).'</big></big></th>';
+                    echo '<th style="border:#000000 thin solid;background-color:#cccccc;text-align:center;"><big><big>'.array_sum($arrayCalif).'</big></big></th>';
                     echo '</tr>';
                     //la información acerca de las competencias
-                    $sumaTotalComp = (array_sum($arrayCCL)+array_sum($arrayCMCT)+array_sum($arrayCD)+array_sum($arrayCAA)+
-                        array_sum($arrayCSYC)+array_sum($arraySIEP)+array_sum($arrayCEC));
+                    //$sumaTotalComp = (array_sum($arrayCCL)+array_sum($arrayCMCT)+array_sum($arrayCD)+array_sum($arrayCAA)+
+                    //    array_sum($arrayCSYC)+array_sum($arraySIEP)+array_sum($arrayCEC));
+                    if($arrayCCL){
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia en Comunicación Lingüística (CCL) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCCL)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia en Comunicación Lingüística (CCL) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCCL)/count($arrayCCL))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arrayCMCT){
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia Científica y Matemática (CMCT) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCMCT)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia Científica y Matemática (CMCT) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCMCT)/count($arrayCMCT))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arrayCD){
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia Digital (CD) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCD)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia Digital (CD) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCD)/count($arrayCD))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arrayCAA){    
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia Aprender a Aprender (CAA) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCAA)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia Aprender a Aprender (CAA) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCAA)/count($arrayCAA))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arrayCSYC){    
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia Social y Cívica (CSYC) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCSYC)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia Social y Cívica (CSYC) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCSYC)/count($arrayCSYC))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arraySIEP){    
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia Sentido e Iniciativa Emprendedora (SIEP) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arraySIEP)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia Sentido e Iniciativa Emprendedora (SIEP) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arraySIEP)/count($arraySIEP))),2).'</th>';                    
                     echo '</tr>';
+                    }
+                    if($arrayCEC){    
                     echo '<tr>';
-                    echo '<td style="border:#000000 thin solid;">Participación Competencia en Conciencia y Expresión Cultural (CEC) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;">'.round(((array_sum($arrayCEC)/$sumaTotalComp)*100),0).' %</th>';                    
+                    echo '<td style="border:#000000 thin solid;">Calificación Competencia en Conciencia y Expresión Cultural (CEC) en el proyecto</td>';
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCEC)/count($arrayCEC))),2).'</th>';                    
                     echo '</tr>';
+                    }
                     unset($arrayCalif);
-                    unset($arrayCCL);
-                    unset($arrayCMCT);
-                    unset($arrayCD);
-                    unset($arrayCAA);
-                    unset($arrayCSYC);
-                    unset($arraySIEP);
-                    unset($arrayCEC);
+                    if($arrayCCL){unset($arrayCCL);}
+                    if($arrayCCL){unset($arrayCMCT);}
+                    if($arrayCCL){unset($arrayCD);}
+                    if($arrayCCL){unset($arrayCAA);}
+                    if($arrayCCL){unset($arrayCSYC);}
+                    if($arrayCCL){unset($arraySIEP);}
+                    if($arrayCCL){unset($arrayCEC);}
                 }else{
                     echo '<tr><th>No existen calificaciones para este alumno y proyecto</th><th></th></tr>';
                 }

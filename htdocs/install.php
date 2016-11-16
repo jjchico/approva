@@ -23,10 +23,10 @@ require('config.php');
 //functions.php
 require('functions.php');
 //connect
-$mysqli = new mysqli(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD);
+//$mysqli = new mysqli(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD);
 
 
-//si venimos de dar de alta
+// si venimos de dar de alta
 
 if(isset($_POST['username'])){
 	//conexión dataBase
@@ -40,27 +40,38 @@ if(isset($_POST['username'])){
     $sql="insert into user values(NULL,'$username','$password')";
     $result=mysqli_query($con_mysql,$sql) or die(mysqli_error($con_mysql));
     if($result){
-        header("Location:../login.php");
-    }else{
+        header("Location:login.php");
+    } else {
         echo 'Hubo algún problema al proceder al registro inicial de usuario';
     }
+} //fin dar de alta
+
+// Creación inicial de base de datos y tablas
+
+$mysql_con = mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD) or	die(mysqli_error($mysql_con));
+$database = DB_DATABASE;
+$table_check = 'user';
+//
+// Creamos la base de datos si no existe
+if (! dbExists($mysql_con, $database)) {
+ 	echo "Crando base de datos '$database'.";
+ 	$query = "CREATE DATABASE '$database'";
+ 	$retval = mysqli_query($mysql_con, $query) or
+ 	    die('No se pudo crear la base de datos: ' . mysqli_error($mysql_con));
+ 	echo "La base de datos $database se ha creado";
 }
 
-//fin dar de alta
+ // La base de datos existe. Comprobamos si ya está iniciada
+ mysqli_select_db($mysql_con, $database);
+ if (tableExists($mysql_con, $table_check)) {
+ 	echo "La base de datos ya fue iniciada. No se puede hacer una nueva instalación.";
+ 	echo "Compruebe la base de datos o cambie el nombre de la base de datos en la configuración.";
+ 	exit;
+}
 
-$database = DB_DATABASE;
-$sql = "CREATE Database $database";
-$retval = mysqli_query($mysqli, $sql) or
-    die('No se pudo crear la base de datos: ' . mysqli_error($mysqli));
+//die('DEBUG: Aquí empezaría a crear tablas ...');
 
-echo "La base de datos $database se ha creado";
-echo '<br/>';
-
-//conexión a la base de datos
-mysqli_select_db($mysqli, $database);
-
-
-   ///////////////////////////////////////////////////creación de tablas
+//// creación de tablas ////
 
        //agrupamientos
        $sql="CREATE TABLE `agrupamientos` (
@@ -71,7 +82,7 @@ mysqli_select_db($mysqli, $database);
       `nivel` varchar(225) NOT NULL,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-       $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+       $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
        if($result){
             echo 'Tabla agrupamientos creada';
             echo '<br/>';
@@ -84,7 +95,7 @@ mysqli_select_db($mysqli, $database);
   `alumno` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla alumnado creada';
             echo '<br/>';
@@ -98,7 +109,7 @@ mysqli_select_db($mysqli, $database);
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla asistencia creada';
             echo '<br/>';
@@ -114,7 +125,7 @@ mysqli_select_db($mysqli, $database);
   `fecha` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla calificaciones creada';
             echo '<br/>';
@@ -128,7 +139,7 @@ mysqli_select_db($mysqli, $database);
   `diario` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla diario creada';
             echo '<br/>';
@@ -141,7 +152,7 @@ mysqli_select_db($mysqli, $database);
   `estandar` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla estándares creada';
             echo '<br/>';
@@ -157,7 +168,7 @@ mysqli_select_db($mysqli, $database);
   `espacio` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla horario creada';
             echo '<br/>';
@@ -181,7 +192,7 @@ mysqli_select_db($mysqli, $database);
   `cec` set('0','1') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla proyectos creada';
             echo '<br/>';
@@ -194,7 +205,7 @@ mysqli_select_db($mysqli, $database);
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $result=mysqli_query($mysqli,$sql) or die(mysqli_error());
+        $result=mysqli_query($mysql_con,$sql) or die(mysqli_error($mysql_con));
         if($result){
             echo 'Tabla usuario creada';
             echo '<br/>';
@@ -204,7 +215,7 @@ mysqli_select_db($mysqli, $database);
 echo '<hr>';
 
 
-   mysqli_close($mysqli);
+   mysqli_close($mysql_con);
 
 //fin creación de tablas
 
@@ -216,7 +227,7 @@ echo '<h2>Introduzca el nombre de usuario y la contraseña con la que accederá 
 
 echo '<p><big><b>Una vez introduzca sus datos, quedará registrado su nombre de usuario y contraseña y podrá utilizarlos para acceder a la plataforma</b></big></p>';
 
-echo '<form method="post" action="index.php" id="login_form">';
+echo '<form method="post" action="install.php" id="login_form">';
 
 echo '<ul>';
 		echo '<li>Nombre de usuario que va a usar para acceder: <input name="username" type="text" id="username" value="" size="10"  maxlength="8" /></li>';

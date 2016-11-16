@@ -40,19 +40,32 @@ if (!$con_mysql) {
 }
 
 // Comprobamos que existe la base de datos
-$query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='".DB_DATABASE."'";
-$result = mysqli_query($con_mysql, $query) or die(mysqli_error($con_mysql));
-$count = count(mysqli_fetch_row($result));
-if ($count === 0){
+// $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='".DB_DATABASE."'";
+// $result = mysqli_query($con_mysql, $query) or die(mysqli_error($con_mysql));
+// $count = count(mysqli_fetch_row($result));
+// if ($count === 0){
+
+// Comprobamos que existe la base de datos
+$do_install = False;
+$database = DB_DATABASE;
+$table_check = 'user';
+if ( ! dbExists($con_mysql, $database)) {
+    echo "No existe la base de datos $database." . PHP_EOL;
+    $do_install = True;
+} else {
+    // Seleccionamos la base de datos y comprobamos que está iniciada
+    mysqli_select_db($con_mysql, $database) or die(mysqli_error($con_mysql));
+    if ( ! tableExists($con_mysql, $table_check)) {
+        echo "La base de datos $database existe pero está vacía." . PHP_EOL;
+        $do_install = True;
+    }
+}
+if ($do_install) {
 	$current_dir = dirname($_SERVER['PHP_SELF']);
-	echo "No existe la base de datos '" . DB_DATABASE . "'" .
-		 "¿Primera instalación?" . PHP_EOL;
+    echo "¿Primera instalación?" . PHP_EOL;
 	echo 'Siga el enlace para hacer la <a href="' . $current_dir . '/install.php">instalación inicial del programa</a>' . PHP_EOL;
 	exit;
 }
-
-// Seleccionamos la base de datos
-mysqli_select_db($con_mysql, DB_DATABASE) or die(mysqli_error($con_mysql));
 
 /////////////////////////////////////////////////////////////////////user
 

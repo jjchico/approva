@@ -37,7 +37,7 @@ if(isset($_POST['username'])){
 
     $username=$_POST['username'];
     $password=sha1($_POST['password']);
-    $sql="insert into user values(NULL,'$username','$password')";
+    $sql="insert into `$tabla_user` values(NULL,'$username','$password')";
     $result=mysqli_query($con_mysql,$sql) or die(mysqli_error($con_mysql));
     if($result){
         header("Location:login.php");
@@ -50,7 +50,7 @@ if(isset($_POST['username'])){
 
 $mysql_con = mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD) or	die(mysqli_error($mysql_con));
 $database = DB_DATABASE;
-$table_check = 'user';
+$table_check = $tabla_user;
 //
 // Creamos la base de datos si no existe
 if (! dbExists($mysql_con, $database)) {
@@ -74,7 +74,7 @@ if (! dbExists($mysql_con, $database)) {
 //// creación de tablas ////
 
        //agrupamientos
-       $sql="CREATE TABLE `agrupamientos` (
+       $sql="CREATE TABLE `$tabla_agrupamientos` (
       `id` int(11) NOT NULL auto_increment,
       `agrupamiento` varchar(225) NOT NULL,
       `curso` varchar(225) NOT NULL,
@@ -89,7 +89,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //alumnado
-        $sql="CREATE TABLE `alumnado` (
+        $sql="CREATE TABLE `$tabla_alumnado` (
   `id` int(11) NOT NULL auto_increment,
   `agrupamiento_id` int(11) NOT NULL,
   `alumno` varchar(255) NOT NULL,
@@ -102,7 +102,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //asistencia
-        $sql="CREATE TABLE `asistencia` (
+        $sql="CREATE TABLE `$tabla_asistencia` (
   `id` int(11) NOT NULL auto_increment,
   `alumno_id` int(11) NOT NULL,
   `tipo` set('f','r','j') NOT NULL,
@@ -116,7 +116,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //calificaciones
-        $sql="CREATE TABLE `calificaciones` (
+        $sql="CREATE TABLE `$tabla_calificaciones` (
   `id` int(11) NOT NULL auto_increment,
   `alumno_id` int(11) NOT NULL,
   `proyecto_id` int(11) NOT NULL,
@@ -132,7 +132,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //diario
-        $sql="CREATE TABLE `diario` (
+        $sql="CREATE TABLE `$tabla_diario` (
   `id` int(11) NOT NULL auto_increment,
   `sesion` date NOT NULL,
   `agrupamiento_id` int(11) NOT NULL,
@@ -146,7 +146,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //estándares
-        $sql="CREATE TABLE `estandares` (
+        $sql="CREATE TABLE `$tabla_estandares` (
   `id` int(11) NOT NULL auto_increment,
   `agrupamiento_id` int(11) NOT NULL,
   `estandar` text NOT NULL,
@@ -159,7 +159,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //horario
-        $sql="CREATE TABLE `horario` (
+        $sql="CREATE TABLE `$tabla_horario` (
   `id` int(11) NOT NULL auto_increment,
   `franja` varchar(255) NOT NULL,
   `dia` int(11) NOT NULL,
@@ -175,7 +175,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //proyectos
-        $sql="CREATE TABLE `proyectos` (
+        $sql="CREATE TABLE `$tabla_proyectos` (
   `id` int(11) NOT NULL auto_increment,
   `agrupamiento_id` int(11) NOT NULL,
   `estandar_id` int(11) NOT NULL,
@@ -199,7 +199,7 @@ if (! dbExists($mysql_con, $database)) {
        }
 
         //usuario
-        $sql="CREATE TABLE `user` (
+        $sql="CREATE TABLE `$tabla_user` (
   `id` int(11) NOT NULL auto_increment,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,

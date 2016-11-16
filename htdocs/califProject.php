@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 //config
@@ -34,7 +34,7 @@ if (!$con_mysql)
 
 //si hemos solicitado grabar notas/////////////////////////////////////////////////////////////////////////
 if(isset($_POST['stringArrayIdProyecto'])){
-    
+
         //recogemos nombre del proyecto
         $nombreProyecto = $_POST['nombreProyecto'];
 
@@ -46,7 +46,7 @@ if(isset($_POST['stringArrayIdProyecto'])){
         $arrayIdProyecto = explode('@',$stringArrayIdProyecto);
 
         //seleccionamos alumnado del agrupamiento
-        $query="SELECT * from alumnado where agrupamiento_id = '$idAgrupamiento' order by alumno";
+        $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         for($a=0;$a<$num;$a++){
@@ -62,7 +62,7 @@ if(isset($_POST['stringArrayIdProyecto'])){
                 if(isset($_POST['txt_'.$idAlumno.'_'.$n.''])&&$_POST['txt_'.$idAlumno.'_'.$n.'']<>""){
                     $calificacion = $_POST['txt_'.$idAlumno.'_'.$n.''];
                     //compruebo si ya tiene nota
-                    $querySelect = "select id from calificaciones where alumno_id='$idAlumno' and proyecto_id='$arrayIdProyecto[$n]' and 
+                    $querySelect = "select id FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$arrayIdProyecto[$n]' and
                     proyecto='$nombreProyecto'";
                     $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
                     $numSelect = mysqli_num_rows($resultSelect);
@@ -70,18 +70,18 @@ if(isset($_POST['stringArrayIdProyecto'])){
                     if($numSelect>0){
                         $rowSelect = mysqli_fetch_array($resultSelect,MYSQLI_ASSOC);
                         $idSelect = $rowSelect['id'];
-                        $queryUpdate = "update calificaciones set calificacion = '$calificacion' where id = '$idSelect'";
-                        $resultUpdate = mysqli_query($con_mysql,$queryUpdate)or die('ERROR:'.mysqli_error());  
-                         
+                        $queryUpdate = "update `$tabla_calificaciones` set calificacion = '$calificacion' where id = '$idSelect'";
+                        $resultUpdate = mysqli_query($con_mysql,$queryUpdate)or die('ERROR:'.mysqli_error());
+
 
                     }else{//si no hay nota, inserto
-                        $queryInsert="insert into calificaciones values(NULL,'$idAlumno','$arrayIdProyecto[$n]','$nombreProyecto','$calificacion',now())";
-                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error());  
-                         
+                        $queryInsert="insert into `$tabla_calificaciones` values(NULL,'$idAlumno','$arrayIdProyecto[$n]','$nombreProyecto','$calificacion',now())";
+                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error());
+
                     }
 
                 }//fin hay nota
-            }//fin for estándares para un alumno    
+            }//fin for estándares para un alumno
         }//fin for alumnos
         echo '<script>alert(\'Calificaciones Grabadas\');</script>';
 }
@@ -96,8 +96,8 @@ echo '<h1>Calificación de Proyecto: '.$nombreProyecto.'</h1>';
 
 
 //datos del proyecto para montar columnas
-$query="SELECT estandares.estandar,proyectos.id FROM estandares,proyectos WHERE proyectos.proyecto = '$nombreProyecto' and 
-proyectos.agrupamiento_id = '$idAgrupamiento' and proyectos.estandar_id = estandares.id";
+$query="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and 
+`$tabla_proyectos`.agrupamiento_id = '$idAgrupamiento' and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
 $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 $numEstandares=mysqli_num_rows($result);
 if($numEstandares>0){
@@ -114,7 +114,7 @@ if($numEstandares>0){
     $stringArray = implode('@',$array_idProyecto);
     echo '</tr>';
     //datos para la lista de alumnos
-    $query="SELECT * from alumnado where agrupamiento_id = '$idAgrupamiento' order by alumno";
+    $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     for($a=0;$a<$num;$a++){
@@ -123,7 +123,7 @@ if($numEstandares>0){
         $idAlumno = $row['id'];
         for($i=0;$i<$numEstandares;$i++){
             //compruebo si ya tiene nota
-            $querySelect = "select calificacion from calificaciones where alumno_id='$idAlumno' and proyecto_id='$array_idProyecto[$i]' and 
+            $querySelect = "select calificacion FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$array_idProyecto[$i]' and
             proyecto='$nombreProyecto'";
             $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
             $numSelect = mysqli_num_rows($resultSelect);
@@ -132,15 +132,15 @@ if($numEstandares>0){
                 $rowSelect=mysqli_fetch_array($resultSelect,MYSQLI_ASSOC);
                 echo '<td style="text-align:center"><input type="text" id="txt_'.$idAlumno.'_'.$i.'" name="txt_'.$idAlumno.'_'.$i.'" size="5" maxlength="5" value="'.$rowSelect['calificacion'].'" /></td>';
             }else{
-                echo '<td style="text-align:center"><input type="text" id="txt_'.$idAlumno.'_'.$i.'" name="txt_'.$idAlumno.'_'.$i.'" size="5" maxlength="5" /></td>'; 
-            }            
+                echo '<td style="text-align:center"><input type="text" id="txt_'.$idAlumno.'_'.$i.'" name="txt_'.$idAlumno.'_'.$i.'" size="5" maxlength="5" /></td>';
+            }
         }
         echo '</tr>';
     }
     echo '</table>';
     echo '</form>';
     echo '<br/><p style="text-align:center;"><a href="#" onclick="califica(\''.$idAgrupamiento.'\',\''.$stringArray.'\',\''.$nombreProyecto.'\')">Grabar Calificaciones</a></p>';
-    
+
 }//fin if estandares
 
 // Free result set

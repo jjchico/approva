@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 //forzamos codificación utf-8
@@ -40,8 +40,8 @@ $nombreProyecto = $_GET['nombreProyecto'];
 //datos del proyecto para presentar las rúbricas
 
 //montar tabla: por filas, los alumnos, por columnas, las casillas de la rúbrica
-$queryEstandares="SELECT estandares.estandar,proyectos.id,proyectos.peso FROM estandares,proyectos WHERE proyectos.proyecto = '$nombreProyecto' and 
-proyectos.agrupamiento_id = '$idAgrupamiento' and proyectos.estandar_id = estandares.id";
+$queryEstandares="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.peso FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and 
+`$tabla_proyectos`.agrupamiento_id = '$idAgrupamiento' and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
 $resultEstandares=mysqli_query($con_mysql,$queryEstandares)or die('ERROR:'.mysqli_error());
 $numEstandares=mysqli_num_rows($resultEstandares);
 if($numEstandares>0){
@@ -66,16 +66,16 @@ if($numEstandares>0){
             echo '</tr>';
 
             //datos para la lista de alumnos
-            $query="SELECT * from alumnado where agrupamiento_id = '$idAgrupamiento' order by alumno";
+            $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
             $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
             $num=mysqli_num_rows($result);
             for($a=0;$a<$num;$a++){
                 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
                 echo '<tr>';
                     echo '<td>'.$row['alumno'].'</td>';
-                    $idAlumno = $row['id'];            
+                    $idAlumno = $row['id'];
                     //compruebo si ya tiene nota para el estándar de aprendizaje en cuestión
-                    $querySelect = "select calificacion from calificaciones where alumno_id='$idAlumno' and proyecto_id='$idProyecto' and 
+                    $querySelect = "select calificacion FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$idProyecto' and
                     proyecto='$nombreProyecto'";
                     $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
                     $numSelect = mysqli_num_rows($resultSelect);
@@ -108,8 +108,8 @@ if($numEstandares>0){
                         echo '<td></td>';
                         echo '<td></td>';
                         echo '<td></td>';
-                        echo '<td></td>'; 
-                    }    
+                        echo '<td></td>';
+                    }
                 echo '</tr>';
         }
         echo '</table>';
@@ -121,10 +121,10 @@ if($numEstandares>0){
             echo '<span>E: No comprende el problema.</span><br/>';
             echo '<span>F: No responde. No intentó hacer la tarea.</span><br/>';
         echo '</p>';
-        
+
         //el salto de página
         echo '<p style="page-break-after:always"></p>';
-        
+
     }//fin de for (estándar a estándar)
 }//fin if estandares
 

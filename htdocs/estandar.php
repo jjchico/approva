@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 echo '<script>jQuery(document).ready(function($){$(\'#estandaresTable\').tableScroll({height:200});});</script>';
@@ -43,7 +43,7 @@ if(isset($_POST['id'])){
 if(isset($_POST['estandar'])){
     $estandar = $_POST['estandar'];
     //insertamos en base de datos
-    $query="INSERT INTO `estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$id', '$estandar');";
+    $query="INSERT INTO `$tabla_estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$id', '$estandar');";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 }
 
@@ -51,14 +51,14 @@ if(isset($_POST['estandar'])){
 if(isset($_POST['idEstandarEliminar'])){
     $idEstandarEliminar = $_POST['idEstandarEliminar'];
     //borramos de la base de datos
-    $queryDelEstandar="DELETE FROM estandares WHERE estandares.id = '$idEstandarEliminar'";
+    $queryDelEstandar="DELETE FROM `$tabla_estandares` WHERE `$tabla_estandares`.id = '$idEstandarEliminar'";
     $resultDelEstandar=mysqli_query($con_mysql,$queryDelEstandar)or die('ERROR:'.mysqli_error());
 }
 //fin eliminar estándar de aprendizaje
 
 //select con agrupamientos
 //consulta de agrupamientos para listar
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){
@@ -70,7 +70,7 @@ if(isset($_POST['idEstandarEliminar'])){
                     echo '<option value="'.$row['id'].'" selected="selected">'.$row['agrupamiento'].'</option>';
                 }else{
                     echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
-                }                                
+                }
             }
             echo '</select>';
         }else{
@@ -85,9 +85,9 @@ if(isset($_POST['idEstandarEliminar'])){
                 echo '<tr>';
                     echo '<td>Estándar de Aprendizaje</td><td></td>';
                 echo '</tr>';
-            if(isset($_POST['id'])){    
+            if(isset($_POST['id'])){
                 //seleccionar estándares para el agrupamiento seleccionado
-                $query="SELECT * FROM `estandares` where agrupamiento_id='$id'";
+                $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$id'";
                 $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
                 $num=mysqli_num_rows($result);
                 if($num>0){
@@ -95,9 +95,9 @@ if(isset($_POST['idEstandarEliminar'])){
                         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
                         //inPlace para cambiar nombre de agrupamiento
                         echo '<script>';
-					    echo '$(\'#estandar_'.$row['id'].'\').editInPlace({						
+					    echo '$(\'#estandar_'.$row['id'].'\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=estandar&field=estandar&table=estandares&id='.$row['id'].'\',
+						params: \'script=estandar&field=estandar&table='.$tabla_estandares.'&id='.$row['id'].'\',
 						show_buttons: true,
 						field_type: "textarea"
 					    });';
@@ -111,7 +111,7 @@ if(isset($_POST['idEstandarEliminar'])){
                 }
             }
         echo '</table>';
-    
+
     //fin seleccionar estándares
 
     //input para añadir estándar

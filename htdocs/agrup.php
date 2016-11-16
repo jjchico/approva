@@ -8,16 +8,16 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 date_default_timezone_set('Europe/Madrid');
@@ -28,22 +28,22 @@ if(isset($_POST['agrup'])){
 
     $agrup = $_POST['agrup'];
     $id = $_POST['id'];
-    
+
     //inPlace para cambiar nombre de agrupamiento
                 echo '<script>';
-					echo '$(\'#agrup_'.$id.'\').editInPlace({						
+					echo '$(\'#agrup_'.$id.'\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=agrup&field=agrupamiento&table=agrupamientos&id='.$id.'\',
+						params: \'script=agrup&field=agrupamiento&table='.$tabla_agrupamientos.'&id='.$id.'\',
 						show_buttons: true,
 						field_type: "text"
 					});';
                 echo '</script>';
     //fin inPlace
-    
+
     echo '<a href="#" onclick="eliminaAgrup(\''.$id.'\')" title="Eliminar Agrupamiento" ><img src="css/images/delete.png" /></a>';
     echo ' ';
     echo '<h1 id="agrup_'.$id.'">'.$agrup.'</h1>';
-    
+
     if(isset($_POST['fecha'])){
         $fecha = $_POST['fecha'];
         $date = explode('-', $fecha);
@@ -52,12 +52,12 @@ if(isset($_POST['agrup'])){
     }else{
         $fecha = date('d-m-Y');
         $date = explode('-', $fecha);
-        $mysqlDate = $date[2].'-'.$date[1].'-'.$date[0];     
+        $mysqlDate = $date[2].'-'.$date[1].'-'.$date[0];
         echo 'Sesión: <input style="text-align:center;" type="text" id="fecha" name="fecha" value="'.$fecha.'" onchange="goAgrupFecha(\''.$agrup.'\',\''.$id.'\')" /><br/><br/>';
     }
-     
+
 //config.php
-require('config.php');       
+require('config.php');
 //functions.php
 require('functions.php');
 //conexión dataBase
@@ -66,70 +66,70 @@ if (!$con_mysql)
 {
 die("Connection error: " . mysqli_connect_error());
 }
-    
+
     //si hay petición de eliminar alumno
      if(isset($_POST['idAlumnoElimina'])){
         $idAlumnoElimina = $_POST['idAlumnoElimina'];
         //borramos de la base de datos
-        
-        $queryDelAlum="DELETE FROM alumnado WHERE alumnado.id = '$idAlumnoElimina'";
+
+        $queryDelAlum="DELETE FROM `$tabla_alumnado` WHERE `$tabla_alumnado`.id = '$idAlumnoElimina'";
         $resultDelAlum=mysqli_query($con_mysql,$queryDelAlum)or die('ERROR:'.mysqli_error());
-         
-        $queryDelAlumCalif="DELETE FROM calificaciones WHERE calificaciones.alumno_id = '$idAlumnoElimina'";
+
+        $queryDelAlumCalif="DELETE FROM `$tabla_calificaciones` WHERE `$tabla_calificaciones`.alumno_id = '$idAlumnoElimina'";
         $resultDelAlumCalif=mysqli_query($con_mysql,$queryDelAlumCalif)or die('ERROR:'.mysqli_error());
     }
     //fin petición eliminar alumno
-    
+
     //si hay petición de cambiar alumno de agrupamiento
      if(isset($_POST['idAlumnoCambia'])){
         $idAlumnoCambia = $_POST['idAlumnoCambia'];
         $idAgrupCambio = $_POST['idAgrupCambio'];
         //lo cambiamos de agrupamiento
-        $queryCambiaAlum="UPDATE alumnado SET agrupamiento_id = '$idAgrupCambio' WHERE alumnado.id = '$idAlumnoCambia'";
+        $queryCambiaAlum="UPDATE `$tabla_alumnado` SET agrupamiento_id = '$idAgrupCambio' WHERE `$tabla_alumnado`.id = '$idAlumnoCambia'";
         $resultCambiaAlum=mysqli_query($con_mysql,$queryCambiaAlum)or die('ERROR:'.mysqli_error());
     }
     //fin petición eliminar alumno
-    
+
     //si hay petición matricular un alumno
     if(isset($_POST['nombreAlum'])){
         $nombreAlum = $_POST['nombreAlum'];
         //insertamos en base de datos
-        
-        $query="INSERT INTO `alumnado` (`id`, `agrupamiento_id`, `alumno`) VALUES (NULL, '$id', '$nombreAlum');";
+
+        $query="INSERT INTO `$tabla_alumnado` (`id`, `agrupamiento_id`, `alumno`) VALUES (NULL, '$id', '$nombreAlum');";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     }
     //fin petición matricular un alumno
-    
+
     //si hay petición poner falta
     if(isset($_POST['asistencia'])){
         $asistencia=$_POST['asistencia'];//el tipo de asistencia
         $idAlumno=$_POST['idAlumno'];//el id de alumno
-        
+
         //si queremos anular falta
         if($asistencia=='0'){
             //borramos
-            $queryEliminaAsistencia = "delete from asistencia where alumno_id='$idAlumno' and fecha='$mysqlDate'";
+            $queryEliminaAsistencia = "delete FROM `$tabla_asistencia` where alumno_id='$idAlumno' and fecha='$mysqlDate'";
             $resultEliminaAsistencia = mysqli_query($con_mysql,$queryEliminaAsistencia)or die('ERROR:'.mysqli_error());
         }else{
             //consultamos si hay dato
-            $queryAsistencia = "select * from asistencia where alumno_id='$idAlumno' and fecha='$mysqlDate'";
+            $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumno' and fecha='$mysqlDate'";
             $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
             if(mysqli_num_rows($resultAsistencia)>0){
                 //actualizo
-                $queryActualizaAsistencia = "update asistencia set tipo = '$asistencia' where alumno_id='$idAlumno' and fecha='$mysqlDate'";
+                $queryActualizaAsistencia = "update `$tabla_asistencia` set tipo = '$asistencia' where alumno_id='$idAlumno' and fecha='$mysqlDate'";
                 $resultActualizaAsistencia = mysqli_query($con_mysql,$queryActualizaAsistencia)or die('ERROR:'.mysqli_error());
             }else{
                 //inserto
-                $queryInsertaAsistencia="INSERT INTO `asistencia` (`id`, `alumno_id`, `tipo`,`fecha`) VALUES (NULL, '$idAlumno', '$asistencia','$mysqlDate');";
+                $queryInsertaAsistencia="INSERT INTO `$tabla_asistencia` (`id`, `alumno_id`, `tipo`,`fecha`) VALUES (NULL, '$idAlumno', '$asistencia','$mysqlDate');";
                 $resultInsertaAsistencia=mysqli_query($con_mysql,$queryInsertaAsistencia)or die('ERROR:'.mysqli_error());
-            }   
+            }
         }
     }
-    
+
     //fin petición poner falta
-    
+
     //consulta alumnado agrupamiento
-    $query="SELECT * FROM `alumnado` where agrupamiento_id = '$id' order by `alumno`";
+    $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$id' order by `alumno`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){
@@ -140,9 +140,9 @@ die("Connection error: " . mysqli_connect_error());
                 $idAlumEdita = $row['id'];
                 //inPlace para cambiar nombre de alumno
                 echo '<script>';
-					echo '$(\'#'.$idAlumEdita.'\').editInPlace({						
+					echo '$(\'#'.$idAlumEdita.'\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=agrup&field=alumno&table=alumnado&id='.$idAlumEdita.'\',
+						params: \'script=agrup&field=alumno&table='.$tabla_alumnado.'&id='.$idAlumEdita.'\',
 						show_buttons: true,
 						field_type: "text"
 					});';
@@ -154,7 +154,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '<select id="selCambiaAgrup" name="selCambiaAgrup" onchange="cambiaAlumAgrup(\''.$idAlumEdita.'\',\''.$id.'\',\''.$agrup.'\')" style="width:140px;">';
                     echo '<option value="0">Cambio agrupamiento</option>';
                         //consulta de agrupamientos para listar
-                        $queryAgCambio="SELECT * FROM `agrupamientos` where id <> '$id' order by `agrupamiento`";
+                        $queryAgCambio="SELECT * FROM `$tabla_agrupamientos` where id <> '$id' order by `agrupamiento`";
                         $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error());
                         $numAgCambio=mysqli_num_rows($resultAgCambio);
                         if($numAgCambio>0){
@@ -166,7 +166,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '</select>';
                     echo ' ';
                     //consultamos si hay dato
-                    $queryAsistencia = "select * from asistencia where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
+                    $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
                     $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
                     if(mysqli_num_rows($resultAsistencia)>0){
                         $rowAsistencia = mysqli_fetch_array($resultAsistencia,MYSQLI_ASSOC);
@@ -199,7 +199,7 @@ die("Connection error: " . mysqli_connect_error());
                     //fin enlace para ficha
                     echo ''.($a+1).'. ';
                     echo '<span id="'.$idAlumEdita.'"><big><b>'.$row['alumno'].'</b></big></span>';
-                    
+
                 echo '</li>';
             }
             echo '</td>';
@@ -212,9 +212,9 @@ die("Connection error: " . mysqli_connect_error());
                 $idAlumEdita = $row['id'];
                 //inPlace para cambiar nombre de alumno
                 echo '<script>';
-					echo '$(\'#'.$idAlumEdita.'\').editInPlace({						
+					echo '$(\'#'.$idAlumEdita.'\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=agrup&field=alumno&table=alumnado&id='.$idAlumEdita.'\',
+						params: \'script=agrup&field=alumno&table='.$tabla_alumnado.'&id='.$idAlumEdita.'\',
 						show_buttons: true,
 						field_type: "text"
 					});';
@@ -226,7 +226,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '<select id="selCambiaAgrup" name="selCambiaAgrup" onchange="cambiaAlumAgrup(\''.$idAlumEdita.'\',\''.$id.'\',\''.$agrup.'\')" style="width:140px;">';
                     echo '<option value="0">Cambio agrupamiento</option>';
                         //consulta de agrupamientos para listar
-                        $queryAgCambio="SELECT * FROM `agrupamientos` where id <> '$id' order by `agrupamiento`";
+                        $queryAgCambio="SELECT * FROM `$tabla_agrupamientos` where id <> '$id' order by `agrupamiento`";
                         $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error());
                         $numAgCambio=mysqli_num_rows($resultAgCambio);
                         if($numAgCambio>0){
@@ -238,7 +238,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '</select>';
                     echo ' ';
                     //consultamos si hay dato
-                    $queryAsistencia = "select * from asistencia where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
+                    $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
                     $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
                     if(mysqli_num_rows($resultAsistencia)>0){
                         $rowAsistencia = mysqli_fetch_array($resultAsistencia,MYSQLI_ASSOC);
@@ -271,19 +271,19 @@ die("Connection error: " . mysqli_connect_error());
                     //fin enlace para ficha
                     echo ''.($a+1).'. ';
                     echo '<span id="'.$idAlumEdita.'"><big><b>'.$row['alumno'].'</b></big></span>';
-                    
-                echo '</li>';	
+
+                echo '</li>';
             }
-            echo '</td>';            
+            echo '</td>';
             //fin segunda mitad
             echo '</tr></table>';
         }else{
             echo '<p>No hay alumnado matriculado en este agrupamiento</p>';
         }
         //fin listado agrupamientos
-    
+
     echo '<script>$("#txtAlum").focus();</script>';
-    
+
     //input para añadir alumno al agrupamiento
     echo '<p style="text-align:center;">';
     echo '<span>Añadir alumno/a (apellidos y nombre):</span>';
@@ -293,7 +293,7 @@ die("Connection error: " . mysqli_connect_error());
     echo '<br/>';
     echo '<a href="#" onclick="saveAlum(\''.$agrup.'\',\''.$id.'\')">Añadir alumno/a</a>';
     echo '</p>';
-    
+
 // Free result set
 mysqli_free_result($result);
 mysqli_close($con_mysql);

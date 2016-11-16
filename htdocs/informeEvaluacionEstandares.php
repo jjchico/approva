@@ -57,7 +57,7 @@ echo '<form id="formInformeEvaluacionEstandares" name="formInformeEvaluacionEsta
 
 //select con agrupamientos
 //consulta de agrupamientos para listar
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){            
@@ -93,7 +93,7 @@ if(isset($fechaFin)){
 if(isset($idAgrupamiento)&&isset($fechaIni)&&isset($fechaFin)){
     //seleccionamos proyectos realizados
     
-    $query="SELECT distinct estandar_id FROM proyectos where agrupamiento_id='$idAgrupamiento' and (fecha between '$fechaIniM' and '$fechaFinM')";
+    $query="SELECT distinct estandar_id FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and (fecha between '$fechaIniM' and '$fechaFinM')";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     if($num>0){ 
@@ -102,7 +102,7 @@ if(isset($idAgrupamiento)&&isset($fechaIni)&&isset($fechaFin)){
         for($p=0;$p<$num;$p++){
             $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
             $idEstandar=$row['estandar_id'];
-            $queryEstandar = "select estandar from estandares where id='$idEstandar' order by id";
+            $queryEstandar = "select estandar FROM `$tabla_estandares` where id='$idEstandar' order by id";
             $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
             $rowEstandar = mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
             echo '<tr>';

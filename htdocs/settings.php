@@ -40,7 +40,7 @@ if(isset($_POST['idAgrupamientoOrigen'])&&isset($_POST['idAgrupamientoDestino'])
     $idDestino = $_POST['idAgrupamientoDestino'];
     //seleccionamos los estándares de aprendizaje del agrupamiento origen
     //seleccionar estándares para el agrupamiento seleccionado
-                $query="SELECT * FROM `estandares` where agrupamiento_id='$idOrigen'";
+                $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idOrigen'";
                 $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
                 $num=mysqli_num_rows($result);
                 if($num>0){
@@ -48,7 +48,7 @@ if(isset($_POST['idAgrupamientoOrigen'])&&isset($_POST['idAgrupamientoDestino'])
                         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
                         $estandar = $row['estandar'];
                         //ahora lo grabo con el id del agrupamiento destino
-                        $queryInsert="INSERT INTO `estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$idDestino', '$estandar');";
+                        $queryInsert="INSERT INTO `$tabla_estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$idDestino', '$estandar');";
                         $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error());
                     }
                 //doy aviso
@@ -72,7 +72,7 @@ echo '<h3>Copiar estándares de aprendizaje</h3>';
 
 //select con agrupamientos origen
 //consulta de agrupamientos para listar
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){            
@@ -92,7 +92,7 @@ print '<br/><br/>';
 
 //select con agrupamientos destino
 //consulta de agrupamientos para listar
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){            

@@ -8,13 +8,28 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 define('DB_SERVER', 'localhost');
 define('DB_DATABASE', 'approva');
+define('DB_PREFIX', '001_');
 define('DB_MYSQL_USER', 'root');
 define('DB_MYSQL_PASSWORD', '');
+
+//// NO EDITAR DEBAJO DE ESTA LINEA ////
+
+// Nombres de las tablas de la base de datos
+
+$tabla_agrupamientos = DB_PREFIX . 'agrupamientos';
+$tabla_alumnado = DB_PREFIX . 'alumnado';
+$tabla_asistencia = DB_PREFIX . 'asistencia';
+$tabla_calificaciones = DB_PREFIX . 'calificaciones';
+$tabla_diario = DB_PREFIX . 'diario';
+$tabla_estandares = DB_PREFIX . 'estandares';
+$tabla_horario = DB_PREFIX . 'horario';
+$tabla_proyectos = DB_PREFIX . 'proyectos';
+$tabla_user = DB_PREFIX . 'user';
 ?>

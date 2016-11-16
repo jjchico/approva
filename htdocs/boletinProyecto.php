@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 date_default_timezone_set('Europe/Madrid');
@@ -28,13 +28,13 @@ date_default_timezone_set('Europe/Madrid');
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
 </head>
-    
+
 <body>
-    
+
 <?php
 
 if(isset($_GET['nombreProyecto'])){
-    $nombreProyecto = $_GET['nombreProyecto'];  
+    $nombreProyecto = $_GET['nombreProyecto'];
     $idAgrupamiento = $_GET['idAgrupamiento'];
 
 //config
@@ -49,9 +49,9 @@ if (!$con_mysql)
   die("Connection error: " . mysqli_connect_error());
   }
 
-    
+
     //datos sobre el agrupamiento
-    $query="SELECT * FROM `agrupamientos` where id='$idAgrupamiento'";
+    $query="SELECT * FROM `$tabla_agrupamientos` where id='$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     if($num>0){
@@ -61,10 +61,10 @@ if (!$con_mysql)
         $materia = $row['materia'];
         $nivel = $row['nivel'];
     }
-    
+
     //seleccionamos lista de alumnos
     //consulta alumnado agrupamiento
-    $query="SELECT * FROM `alumnado` where agrupamiento_id = '$idAgrupamiento' order by `alumno`";
+    $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by `alumno`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){//si hay alumnado comenzamos
@@ -77,17 +77,17 @@ if (!$con_mysql)
                 echo '<th style="border:#000000 thin solid;background-color:#cccccc;">Fecha de generación: '.date('d-m-Y').'</th></tr></table>';
                 echo '<table style="margin:auto;border:#000000 thin solid;font-size:11px;width:90%;border-collapse: collapse;">';
                 echo '<tr><td style="border:#000000 thin solid;">Agrupamiento: '.$materia.' '.$curso.' '.$nivel.'</td></tr>';
-                echo '<tr><td style="border:#000000 thin solid;">Apellidos y nombre: '.$row['alumno'].'</td></tr></table>';	
-                
+                echo '<tr><td style="border:#000000 thin solid;">Apellidos y nombre: '.$row['alumno'].'</td></tr></table>';
+
                 //tabla con estándares y notas
                 echo '<br/><table style="margin:auto;border:#000000 thin solid;font-size:11px;width:90%;border-collapse: collapse;">';
                 echo '<tr><th style="border:#000000 thin solid;background-color:#cccccc;">Estándar de aprendizaje</th>';
                 echo '<th style="border:#000000 thin solid;background-color:#cccccc;">Calificación parcial</th></tr>';
                 //seleccionamos las calificaciones que existan de este alumno en este proyecto
-                $queryCalif="SELECT calificaciones.calificacion,proyectos.peso,proyectos.ccl,proyectos.cmct,proyectos.cd,proyectos.caa,proyectos.csyc,
-                proyectos.siep,proyectos.cec, estandares.estandar FROM calificaciones,proyectos,estandares 
-                where calificaciones.alumno_id='$idAlumno' and calificaciones.proyecto='$nombreProyecto' and 
-                calificaciones.proyecto_id = proyectos.id and proyectos.estandar_id = estandares.id";
+                $queryCalif="SELECT `$tabla_calificaciones`.calificacion,`$tabla_proyectos`.peso,`$tabla_proyectos`.ccl,`$tabla_proyectos`.cmct,`$tabla_proyectos`.cd,`$tabla_proyectos`.caa,`$tabla_proyectos`.csyc,
+                `$tabla_proyectos`.siep,`$tabla_proyectos`.cec, `$tabla_estandares`.estandar FROM `$tabla_calificaciones`,`$tabla_proyectos`,estandares
+                where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto='$nombreProyecto' and
+                `$tabla_calificaciones`.proyecto_id = `$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
                 $resultCalif=mysqli_query($con_mysql,$queryCalif)or die('ERROR:'.mysqli_error());
                 $numCalif=mysqli_num_rows($resultCalif);
                 //si hay calificaciones
@@ -117,16 +117,16 @@ if (!$con_mysql)
                             if($rowCalif['cd']<>0){
                             $arrayCAA[]=$rowCalif['cd']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
                             }
-                            if($rowCalif['caa']<>0){    
+                            if($rowCalif['caa']<>0){
                             $arrayCD[]=$rowCalif['caa']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
                             }
-                            if($rowCalif['csyc']<>0){    
+                            if($rowCalif['csyc']<>0){
                             $arrayCSYC[]=$rowCalif['csyc']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
                             }
-                            if($rowCalif['siep']<>0){    
+                            if($rowCalif['siep']<>0){
                             $arraySIEP[]=$rowCalif['siep']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
                             }
-                            if($rowCalif['cec']<>0){    
+                            if($rowCalif['cec']<>0){
                             $arrayCEC[]=$rowCalif['cec']*($rowCalif['calificacion']/$rowCalif['peso'])*100;
                             }
                         echo '</tr>';
@@ -141,43 +141,43 @@ if (!$con_mysql)
                     if($arrayCCL){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia en Comunicación Lingüística (CCL) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCCL)/count($arrayCCL))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCCL)/count($arrayCCL))),2).'</th>';
                     echo '</tr>';
                     }
                     if($arrayCMCT){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia Científica y Matemática (CMCT) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCMCT)/count($arrayCMCT))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCMCT)/count($arrayCMCT))),2).'</th>';
                     echo '</tr>';
                     }
                     if($arrayCD){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia Digital (CD) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCD)/count($arrayCD))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCD)/count($arrayCD))),2).'</th>';
                     echo '</tr>';
                     }
-                    if($arrayCAA){    
+                    if($arrayCAA){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia Aprender a Aprender (CAA) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCAA)/count($arrayCAA))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCAA)/count($arrayCAA))),2).'</th>';
                     echo '</tr>';
                     }
-                    if($arrayCSYC){    
+                    if($arrayCSYC){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia Social y Cívica (CSYC) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCSYC)/count($arrayCSYC))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCSYC)/count($arrayCSYC))),2).'</th>';
                     echo '</tr>';
                     }
-                    if($arraySIEP){    
+                    if($arraySIEP){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia Sentido e Iniciativa Emprendedora (SIEP) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arraySIEP)/count($arraySIEP))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arraySIEP)/count($arraySIEP))),2).'</th>';
                     echo '</tr>';
                     }
-                    if($arrayCEC){    
+                    if($arrayCEC){
                     echo '<tr>';
                     echo '<td style="border:#000000 thin solid;">Calificación Competencia en Conciencia y Expresión Cultural (CEC) en el proyecto</td>';
-                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCEC)/count($arrayCEC))),2).'</th>';                    
+                    echo '<th style="border:#000000 thin solid;background-color:#E0E0E0;text-align:center;">'.round(((array_sum($arrayCEC)/count($arrayCEC))),2).'</th>';
                     echo '</tr>';
                     }
                     unset($arrayCalif);
@@ -192,21 +192,21 @@ if (!$con_mysql)
                     echo '<tr><th>No existen calificaciones para este alumno y proyecto</th><th></th></tr>';
                 }
                 echo '</table>';
-                
+
                 //el salto de página
                 echo '<p style="page-break-after:always"></p>';
-                
-                
+
+
             }//fin de for alumno
         }else{
             echo '<p>No hay alumnado matriculado en este agrupamiento</p>';
         }
         //fin listado agrupamientos
-   
-        
-    
-    
-    
+
+
+
+
+
 }
 
 // Free result set
@@ -217,6 +217,6 @@ mysqli_close($con_mysql);
 
 </body></html>
 
-<?php 
+<?php
 
 ?>

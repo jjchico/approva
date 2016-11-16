@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 date_default_timezone_set('Europe/Madrid');
@@ -24,7 +24,7 @@ date_default_timezone_set('Europe/Madrid');
 echo '<script>$(function(){$( "#fecha" ).datepicker({dateFormat:\'dd-mm-yy\',firstDay: 1});});</script>';
 
 //config.php
-require('config.php');	
+require('config.php');
 
 //conexión dataBase
 $con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
@@ -35,11 +35,11 @@ die("Connection error: " . mysqli_connect_error());
 
 //si hemos mandado fecha
 if(isset($_POST['fecha'])){
-    
-    
+
+
     //montamos fechas
     $date = explode('-', $_POST['fecha']);
-    $mysqlDate = $date[2].'-'.$date[1].'-'.$date[0];    
+    $mysqlDate = $date[2].'-'.$date[1].'-'.$date[0];
 }
 
 //si hemos mandado agrupamiento
@@ -51,21 +51,21 @@ if(isset($_POST['idAgrupamiento'])){
 //si hemos mandado grabar diario
 if(isset($_POST['textoDiario'])){
     $textoDiario = $_POST['textoDiario'];
-    
+
     //vamos a consultar si ya hay contenido en la misma sesión
-    $queryDiario="select * from diario where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
+    $queryDiario="select * FROM `$tabla_diario` where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
     $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error());
     if(mysqli_num_rows($resultDiario)>0){
         $rowDiario=mysqli_fetch_array($resultDiario,MYSQLI_ASSOC);
         $idDiarioActualiza=$rowDiario['id'];
         //actualizamos
-        $query="update diario set diario = '$textoDiario' where id='$idDiarioActualiza';";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error()); 
+        $query="update `$tabla_diario` set diario = '$textoDiario' where id='$idDiarioActualiza';";
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         if($result){echo '<script>alert(\'Contenido de la sesión actualizado\')</script>';}
     }else{
         //guardamos en base de datos
-        $query="insert into diario values(NULL,'$mysqlDate','$idAgrupamiento','$textoDiario');";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());  
+        $query="insert into `$tabla_diario` values(NULL,'$mysqlDate','$idAgrupamiento','$textoDiario');";
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         if($result){echo '<script>alert(\'Contenido de la sesión guardado\')</script>';}
     }
 }
@@ -73,10 +73,10 @@ if(isset($_POST['textoDiario'])){
 
 //si queremos eliminar entrada de diario futura
 if(isset($_POST['idAviso'])){
-    
+
     $idAvisoEliminar = $_POST['idAviso'];
-    $queryEliminaAviso = "delete from diario where id='$idAvisoEliminar'";
-    $resultEliminaAviso=mysqli_query($con_mysql,$queryEliminaAviso)or die('ERROR:'.mysqli_error());  
+    $queryEliminaAviso = "delete FROM `$tabla_diario` where id='$idAvisoEliminar'";
+    $resultEliminaAviso=mysqli_query($con_mysql,$queryEliminaAviso)or die('ERROR:'.mysqli_error());
         if($resultEliminaAviso){echo '<script>alert(\'Entrada en diario eliminada\')</script>';}
 }
 //fin eliminar entrada de diario
@@ -86,23 +86,23 @@ if(isset($_POST['txtNuevaFranja'])){
 
 //functions.php
 require('functions.php');
-    
+
     //recogemos variables
     $txtNuevaFranja = $_POST['txtNuevaFranja'];
-    
+
     //grabamos en base de datos
     for($g=0;$g<5;$g++){
         $agrupGrabar = $_POST['selAgrup_'.$g.''];
         $nombreAgrupGrabar = $_POST['nombreAgrup_'.$g.''];
         $espacioGrabar = $_POST['txtEspacio_'.$g.''];
-        $queryGrabaHorario = "insert into horario values(NULL,'$txtNuevaFranja','$g','$agrupGrabar','$nombreAgrupGrabar','$espacioGrabar');";
-        $resultGrabaHorario=mysqli_query($con_mysql,$queryGrabaHorario)or die('ERROR:'.mysqli_error()); 
+        $queryGrabaHorario = "insert into `$tabla_horario` values(NULL,'$txtNuevaFranja','$g','$agrupGrabar','$nombreAgrupGrabar','$espacioGrabar');";
+        $resultGrabaHorario=mysqli_query($con_mysql,$queryGrabaHorario)or die('ERROR:'.mysqli_error());
     }
 }
 //fin grabar nueva franja
 
 //selección de agrupamientos para tenerlos en arrays
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){
@@ -165,7 +165,7 @@ echo '</tr>';
 //fin encabezado tabla horario
 
 //consulto si hay horario
-$queryFranjas = "select distinct franja from horario";
+$queryFranjas = "select distinct franja FROM `$tabla_horario`";
 $resultFranjas = mysqli_query($con_mysql,$queryFranjas)or die('ERROR:'.mysqli_error());
 $numFranjas = mysqli_num_rows($resultFranjas);
 if($numFranjas>0){
@@ -176,23 +176,23 @@ if($numFranjas>0){
         echo '<tr>';
         echo '<td style="text-align:center;background:#dedede;"><b>'.$franja.'</b></td>';
         for($d=0;$d<5;$d++){
-            $queryF = "select * from horario where franja = '$franja' and dia='$d'";
+            $queryF = "select * FROM `$tabla_horario` where franja = '$franja' and dia='$d'";
             $resultF = mysqli_query($con_mysql,$queryF)or die('ERROR:'.mysqli_error());
             $rowF = mysqli_fetch_array($resultF,MYSQLI_ASSOC);
             if($rowF['agrupamiento']=='RECREO'){
-                echo '<td style="text-align:center;background:#33cc33;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';    
+                echo '<td style="text-align:center;background:#33cc33;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if(($rowF['agrupamiento']=='GUARDIA')){
-                echo '<td style="text-align:center;background:#ff3333;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:#ff3333;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if(($rowF['agrupamiento']=='AT. PADRES')||($rowF['agrupamiento']=='AT. PADRES TUT.')){
-                echo '<td style="text-align:center;background:#cc0088;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:#cc0088;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if($rowF['agrupamiento']=='HUECO'){
-                echo '<td style="text-align:center;background:orange;color:#ff9900;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:orange;color:#ff9900;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if(($rowF['agrupamiento']=='REUNIÓN DEP.')||($rowF['agrupamiento']=='CCP')){
-                echo '<td style="text-align:center;background:#3366ff;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:#3366ff;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if(($rowF['agrupamiento']=='GUARDIA RECREO')||($rowF['agrupamiento']=='GUARDIA BIBLIO')){
-                echo '<td style="text-align:center;background:#85e085;color:#ff3333;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:#85e085;color:#ff3333;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }else if(($rowF['agrupamiento']=='REUNIÓN TUT.')||($rowF['agrupamiento']=='TUTORÍA')){
-                echo '<td style="text-align:center;background:#ff99ff;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>'; 
+                echo '<td style="text-align:center;background:#ff99ff;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
             }
             else{
                 //fabricamos fecha para mandarla en caso de que queramos ver sesión
@@ -249,7 +249,7 @@ if($numFranjas>0){
                         $dia = $diaSesion+$d-4;
                         $fechaDestino=date("d-m-Y", mktime(0, 0, 0, $mes, $dia, $anyo));
                     }
-                    
+
                 }
                 echo '<td style="text-align:center;background:#92b9b9;"><big><b>'.$rowF['agrupamiento'].'</b></big>';
                 print ' ';
@@ -260,7 +260,7 @@ if($numFranjas>0){
         echo '<td style="text-align:center;background:#dedede;"><b>'.$franja.'</b></td>';
         echo '</tr>';
     }
-    
+
     echo '<tr class="fila" style="display:none;">';
     echo '<td>';
     echo '<input type="text" maxlength="12" size="12" id="txtNuevaFranja" name="txtNuevaFranja" />';
@@ -283,7 +283,7 @@ if($numFranjas>0){
                     echo '<option value="94">CCP</option>';
                     echo '<option value="95">AT. PADRES</option>';
                     echo '<option value="96">AT. PADRES TUT.</option>';
-                    echo '<option value="97">TUTORÍA</option>';  
+                    echo '<option value="97">TUTORÍA</option>';
                     echo '<option value="98">RECREO</option>';
                     echo '<option value="99">OTRO</option>';
                 echo '</select>';
@@ -294,14 +294,14 @@ if($numFranjas>0){
     echo '<td style="text-align:center">';
     echo '<a href="#" onclick="grabaFranja()">Grabar Franja</a>';
     echo '</td>';
-    echo '</tr>'; 
-    
+    echo '</tr>';
+
 }else{
     echo '<tr>';
         echo '<td>';
             echo '<input type="text" maxlength="12" size="12" id="txtNuevaFranja" name="txtNuevaFranja" />';
         echo '</td>';
-        
+
         for($d=0;$d<5;$d++){
             echo '<td>';
                 echo '<select id="selAgrup_'.$d.'" name="selAgrup_'.$d.'">';
@@ -320,7 +320,7 @@ if($numFranjas>0){
                     echo '<option value="94">CCP</option>';
                     echo '<option value="95">AT. FAMILIAS</option>';
                     echo '<option value="96">AT. FAMILIAS TUT.</option>';
-                    echo '<option value="97">TUTORÍA</option>';  
+                    echo '<option value="97">TUTORÍA</option>';
                     echo '<option value="98">RECREO</option>';
                     echo '<option value="99">OTRO</option>';
                 echo '</select>';
@@ -343,7 +343,7 @@ if(isset($_POST['nombreAgrupamiento'])){
     echo '<span id="sesion">';
     echo '<p style="text-align:center;">Contenido de la sesión: <input size="20" style="text-align:center;" type="text" id="txtSesionDestino" name="txtSesionDestino" value="'.$_POST['fecha'].'" />&nbsp;<b><span id="spanNombreAgrup" name="spanNombreAgrup">'.$nombreAgrupamiento.'</span></b><input type="hidden" id="hidIdAgrupamiento" name="hidIdAgrupamiento" value="'.$idAgrupamiento.'" /></p>';
     //vamos a consultar si para este agrupamiento y fecha hay sesión guardada
-    $queryDiario="select * from diario where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
+    $queryDiario="select * FROM `$tabla_diario` where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
     $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error());
     if(mysqli_num_rows($resultDiario)>0){//si hay sesión, presento los datos
         $row=mysqli_fetch_array($resultDiario,MYSQLI_ASSOC);
@@ -357,8 +357,8 @@ if(isset($_POST['nombreAgrupamiento'])){
 //fin sesiones
 
 /////AVISOS////////////////////////
-$queryAvisos="select diario.id,diario.sesion,diario.diario,agrupamientos.agrupamiento from diario,agrupamientos where diario.agrupamiento_id=agrupamientos.id and diario.sesion>= DATE_SUB(CURDATE(),INTERVAL 0 DAY) order by diario.sesion";
-$resultAvisos=mysqli_query($con_mysql,$queryAvisos)or die('ERROR:'.mysqli_error());
+$queryAvisos = "select $tabla_diario.id, $tabla_diario.sesion, $tabla_diario.diario, `$tabla_agrupamientos`.agrupamiento FROM `$tabla_diario`, `$tabla_agrupamientos` where $tabla_diario.agrupamiento_id = $tabla_agrupamientos.id and $tabla_diario.sesion>= DATE_SUB(CURDATE(),INTERVAL 0 DAY) order by $tabla_diario.sesion";
+$resultAvisos=mysqli_query($con_mysql,$queryAvisos)or die('ERROR:'.mysqli_error($con_mysql));
 if(mysqli_num_rows($resultAvisos)>0){
     $numAvisos = mysqli_num_rows($resultAvisos);
     for($a=0;$a<$numAvisos;$a++){

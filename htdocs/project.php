@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 echo '<script>jQuery(document).ready(function($){$(\'#detallesProyectoTable\').tableScroll({height:200});});</script>';
@@ -49,18 +49,18 @@ if(isset($_POST['nombreProyecto'])){
 //si he solicitado eliminar el proyecto y sus calificaciones
 if(isset($_POST['deleteProyecto'])){
     //seleccionamos proyectos
-    $query="select * FROM `proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $query="select * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     for($p=0;$p<$num;$p++){
         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
         $idProyectoEliminar=$row['id'];
         //borramos las calificaciones de este id
-        $queryDelCal="delete from calificaciones where proyecto_id='$idProyectoEliminar'";
+        $queryDelCal="delete FROM `$tabla_calificaciones` where proyecto_id='$idProyectoEliminar'";
         $resultDelCal=mysqli_query($con_mysql,$queryDelCal)or die('ERROR:'.mysqli_error());
     }
     //borramos en la tabla proyectos
-    $queryDelPro="delete from proyectos where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $queryDelPro="delete FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
     $resultDelPro=mysqli_query($con_mysql,$queryDelPro)or die('ERROR:'.mysqli_error());
 }
 
@@ -69,7 +69,7 @@ if(isset($_POST['numReplicas'])){
     //número de réplicas
     $numReplicas = $_POST['numReplicas'];
     //consulto características del proyecto
-    $query="select * FROM `proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $query="select * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     for($p=0;$p<$num;$p++){
@@ -87,9 +87,9 @@ if(isset($_POST['numReplicas'])){
         //ahora grabamos
         for($r=0;$r<$numReplicas;$r++){
             $replica = ''.$nombreProyecto.'_replica_'.$r.'';
-            $queryReplica = "insert into proyectos values(NULL,'$idAgrupamiento','$estandarReplicar','$replica',NOW(),'$numItemsReplicar','$pesoReplicar','$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec')";
-            $resultReplica = mysqli_query($con_mysql,$queryReplica)or die('ERROR:'.mysqli_error());    
-        }  
+            $queryReplica = "insert into `$tabla_proyectos` values(NULL,'$idAgrupamiento','$estandarReplicar','$replica',NOW(),'$numItemsReplicar','$pesoReplicar','$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec')";
+            $resultReplica = mysqli_query($con_mysql,$queryReplica)or die('ERROR:'.mysqli_error());
+        }
     }//fin de for
     if($resultReplica){
         echo '<script>alert(\'Réplicas generadas\');</script>';
@@ -101,7 +101,7 @@ if(isset($_POST['idAgrupamientoDestino'])){
     //agrupamiento de destino
     $idAgrupamientoDestino = $_POST['idAgrupamientoDestino'];
     //seleccionamos todos los registros del proyecto y lo vamos guardando en la base de datos con el id del agrupamiento de destino
-    $query="SELECT * FROM `proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){
@@ -118,31 +118,31 @@ if(isset($_POST['idAgrupamientoDestino'])){
                 $siep = $row['siep'];
                 $cec = $row['cec'];
                 //hacemos el insert para el agrupamiento de destino
-                $queryCopia="INSERT INTO `proyectos` (`id`, `agrupamiento_id`, `estandar_id`, `proyecto`, `fecha`, `num`, `peso`,
+                $queryCopia="INSERT INTO `$tabla_proyectos` (`id`, `agrupamiento_id`, `estandar_id`, `proyecto`, `fecha`, `num`, `peso`,
     `ccl`, `cmct`, `cd`, `caa`, `csyc`, `siep`, `cec`) VALUES (NULL, '$idAgrupamientoDestino', '$estandar_id','$nombreProyecto',now(),'$numItems', '$peso',
     '$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec');";
-                $resultCopia=mysqli_query($con_mysql,$queryCopia)or die('ERROR:'.mysqli_error());                
+                $resultCopia=mysqli_query($con_mysql,$queryCopia)or die('ERROR:'.mysqli_error());
             }//fin for
             if($resultCopia){
                 echo '<script>alert("Se ha copiado el proyecto. Puede consultarlo seleccionando el agrupamiento");</script>';
             }
         }//fin if hay registros
-    
+
 }
 
 //si he solicitado eliminar un estándar de un proyecto
 if(isset($_POST['delete'])){
     $idEstandarEliminar=$_POST['delete'];
-    $query="delete FROM `proyectos` where id='$idEstandarEliminar'";
+    $query="delete FROM `$tabla_proyectos` where id='$idEstandarEliminar'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 }
 
 //select con agrupamientos
 //consulta de agrupamientos para listar
-        $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+        $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
-        if($num>0){            
+        if($num>0){
             echo '<select id="selAgrupProyectos" name="selAgrupProyectos" onchange="listaProyectos()">';
             echo '<option value="0">Seleccione Agrupamiento</option>';
             for($a=0;$a<$num;$a++){
@@ -151,7 +151,7 @@ if(isset($_POST['delete'])){
                     echo '<option value="'.$row['id'].'" selected="selected">'.$row['agrupamiento'].'</option>';
                 }else{
                     echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
-                }                                
+                }
             }
             echo '</select>';
         }else{
@@ -162,7 +162,7 @@ echo '<br/><br/>';
 //select con los proyectos grabados en el agrupamiento seleccionado
 if(isset($idAgrupamiento)){
     //consultamos los proyecos
-    $query="SELECT distinct proyecto FROM `proyectos` where agrupamiento_id = '$idAgrupamiento'";
+    $query="SELECT distinct proyecto FROM `$tabla_proyectos` where agrupamiento_id = '$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     if($num>0){
@@ -186,24 +186,24 @@ echo '<br/><br/>';
 
 //presentamos información del planteamiento del proyecto y enlace a generación del documento
 if(isset($nombreProyecto)){
-    $query="SELECT * FROM `proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
         $num=mysqli_num_rows($result);
         if($num>0){
-            
+
             //inPlace para cambiar nombre de agrupamiento
                 echo '<script>';
-					echo '$(\'#spanNombreProyecto\').editInPlace({						
+					echo '$(\'#spanNombreProyecto\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=project&idAgrupamiento='.$idAgrupamiento.'&table=proyectos&proyecto='.$nombreProyecto.'\',
+						params: \'script=project&idAgrupamiento='.$idAgrupamiento.'&table='.$tabla_proyectos.'&proyecto='.$nombreProyecto.'\',
 						show_buttons: true,
 						field_type: "text"
 					});';
                 echo '</script>';
             //fin inPlace
-            
-            
-            
+
+
+
             echo 'Planteamiento actual del proyecto <b><span id="spanNombreProyecto">'.$nombreProyecto.'</span></b>';
             echo '<br/><br/>';
             echo '<table id="detallesProyectoTable" name="detallesProyectoTable">';
@@ -220,7 +220,7 @@ if(isset($nombreProyecto)){
                 echo '<td>';
                     $idProyecto = $row['id'];
                     $estandar_id = $row['estandar_id'];
-                    $queryEstandar = "select estandar from estandares where id='$estandar_id'";
+                    $queryEstandar = "select estandar FROM `$tabla_estandares` where id='$estandar_id'";
                     $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
                     $rowEstandar = mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
                     echo $rowEstandar['estandar'];
@@ -235,20 +235,20 @@ if(isset($nombreProyecto)){
                     if($row['cec']=='1') echo ' CEC ';
                 echo '</td>';
                 echo '<td style="text-align:center;">'.$row['num'].'</td>';
-                
+
                 //inPlace para cambiar peso del estándar en el proyecto
                 echo '<script>';
-					echo '$(\'#pesoEstandar_'.$n.'\').editInPlace({						
+					echo '$(\'#pesoEstandar_'.$n.'\').editInPlace({
 						url: \'inplace.php\',
-						params: \'script=projectPeso&idProyecto='.$idProyecto.'&table=proyectos\',
+						params: \'script=projectPeso&idProyecto='.$idProyecto.'&table='.$tabla_proyectos.'\',
 						show_buttons: true,
 						field_type: "text"
 					});';
                 echo '</script>';
                 //fin inPlace
-                
-                
-                
+
+
+
                 echo '<td style="text-align:center;"><span id="pesoEstandar_'.$n.'">'.$row['peso'].'</span> %</td>';
                 echo '<td style="text-align:center;"><a href="#" title="Elimina estándar del Proyecto" onclick="eliminaProyecto(\''.$idProyecto.'\',\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\')"><img src="css/images/delete.png" /></a></td>';
                 echo '</tr>';
@@ -280,17 +280,17 @@ if(isset($nombreProyecto)){
             echo '<br/>';
             //copiar el proyecto a otro agrupamiento
                 //consulta de agrupamientos para listar
-                $query="SELECT * FROM `agrupamientos` order by `agrupamiento`";
+                $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
                 $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
                 $num=mysqli_num_rows($result);
-                if($num>0){            
+                if($num>0){
                     echo '<select style="width:20%" id="selAgrupCopiaProyecto" name="selAgrupCopiaProyecto" onchange="copiaProyecto(\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\')">';
                     echo '<option value="0">Copiar el proyecto al agrupamiento</option>';
                     for($a=0;$a<$num;$a++){
                         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
                         if($idAgrupamiento!=$row['id']){
                             echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
-                        }                                
+                        }
                     }
                     echo '</select><br/><br/>';
                 }else{

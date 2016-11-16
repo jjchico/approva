@@ -40,8 +40,8 @@ $nombreProyecto = $_GET['nombreProyecto'];
 //datos del proyecto para presentar las rúbricas
 
 //montar tabla: por filas, los alumnos, por columnas, las casillas de la rúbrica
-$queryEstandares="SELECT estandares.estandar,proyectos.id,proyectos.peso FROM estandares,proyectos WHERE proyectos.proyecto = '$nombreProyecto' and
-proyectos.agrupamiento_id = '$idAgrupamiento' and proyectos.estandar_id = estandares.id";
+$queryEstandares="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.peso FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and
+`$tabla_proyectos`.agrupamiento_id = '$idAgrupamiento' and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
 $resultEstandares=mysqli_query($con_mysql,$queryEstandares)or die('ERROR:'.mysqli_error());
 $numEstandares=mysqli_num_rows($resultEstandares);
 if($numEstandares>0){
@@ -65,7 +65,7 @@ if($numEstandares>0){
             echo '</tr>';
 
             //datos para la lista de alumnos
-            $query="SELECT * from alumnado where agrupamiento_id = '$idAgrupamiento' order by alumno";
+            $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
             $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
             $num=mysqli_num_rows($result);
             for($a=0;$a<$num;$a++){
@@ -74,7 +74,7 @@ if($numEstandares>0){
                     echo '<td>'.$row['alumno'].'</td>';
                     $idAlumno = $row['id'];
                     //compruebo si ya tiene nota para el estándar de aprendizaje en cuestión
-                    $querySelect = "select calificacion from calificaciones where alumno_id='$idAlumno' and proyecto_id='$idProyecto' and
+                    $querySelect = "select calificacion FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$idProyecto' and
                     proyecto='$nombreProyecto'";
                     $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
                     $numSelect = mysqli_num_rows($resultSelect);

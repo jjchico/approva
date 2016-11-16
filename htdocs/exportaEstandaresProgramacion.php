@@ -8,15 +8,15 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 //forzamos codificación utf-8
@@ -36,7 +36,7 @@ if (!$con_mysql)
 
 
 //consultamos los agrupamientos
-$query="select * from agrupamientos";
+$query="select * from `$tabla_agrupamientos`";
 $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 $num=mysqli_num_rows($result);
     if($num>0){
@@ -50,12 +50,12 @@ $num=mysqli_num_rows($result);
             echo '<tr>';
             echo '<th>Contenidos</th><th>Criterios de evaluación</th><th>Estándares de Aprendizaje</th><th>Competencias Clave</th><th>Trimestre</th>';
             echo '</tr>';
-            
+
             //ahora consulto los estándares de este agrupamiento y los listo
-            $queryA="SELECT * FROM `estandares` where agrupamiento_id='$idAgrup'";
+            $queryA="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idAgrup'";
             $resultA=mysqli_query($con_mysql,$queryA)or die('ERROR:'.mysqli_error());
             $numA=mysqli_num_rows($resultA);
-            if($numA>0){                
+            if($numA>0){
                 for($f=0;$f<$numA;$f++){
                     $rowA=mysqli_fetch_array($resultA,MYSQLI_ASSOC);
                     $estandar=$rowA['estandar'];
@@ -65,7 +65,7 @@ $num=mysqli_num_rows($result);
                 }
             }
             echo '</table>';
-        }//fin for        
+        }//fin for
     }
 // Free result set
 mysqli_free_result($result);

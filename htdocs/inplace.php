@@ -8,21 +8,21 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
-} 
+	header("Location:login.php");
+}
 
 
 /*
 En este script llevamos a cabo las acciones
-que provengan de los diferentes scripts que 
+que provengan de los diferentes scripts que
 ejecutan el editInPlace
 
 Clasificaré por parámetros:
@@ -47,57 +47,57 @@ $value=$_POST['update_value'];
 
 //en función del script vamos aplicando la lógica
 if($script=='agrup'){
-	$field=$_POST['field'];		
+	$field=$_POST['field'];
 	$table=$_POST['table'];
 	if(isset($_POST['id'])){
 		$id=$_POST['id'];
 		$query="update ".$table." set ".$field."='$value' where id='$id'";
-	}	
+	}
 	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 	if($result){
 		if($field=='alumno'){echo '<big><b>'.$value.'</b></big>';}
         if($field=='agrupamiento'){echo '<h1>'.$value.'</h1>';}
 	}else{
 		echo 'Error. No se ha realizado ningún cambio.';
-	}	
+	}
 }
 
 if($script=='estandar'){
-	$field=$_POST['field'];		
+	$field=$_POST['field'];
 	$table=$_POST['table'];
 	if(isset($_POST['id'])){
 		$id=$_POST['id'];
 		$query="update ".$table." set ".$field."='$value' where id='$id'";
-	}	
+	}
 	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
 	if($result){
 		echo $value;
 	}else{
 		echo 'Error. No se ha realizado ningún cambio.';
-	}	
+	}
 }
 
 if($script=='project'){
     $idAgrupamiento = $_POST['idAgrupamiento'];
     $nombreProyecto = $_POST['proyecto'];
-    $query="update proyectos set proyecto='$value' where agrupamiento_id='$idAgrupamiento' and proyecto='$nombreProyecto'";
+    $query="update `$tabla_proyectos` set proyecto='$value' where agrupamiento_id='$idAgrupamiento' and proyecto='$nombreProyecto'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     if($result){
 		echo '<b>'.$value.'</b>';
 	}else{
 		echo 'Error. No se ha realizado ningún cambio.';
-	}	
+	}
 }
 
 if($script=='projectPeso'){
     $idProyecto = $_POST['idProyecto'];
-    $query="update proyectos set peso='$value' where id='$idProyecto'";
+    $query="update `$tabla_proyectos` set peso='$value' where id='$idProyecto'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     if($result){
 		echo '<b>'.$value.'</b>';
 	}else{
 		echo 'Error. No se ha realizado ningún cambio.';
-	}	
+	}
 }
 
 // Free result set

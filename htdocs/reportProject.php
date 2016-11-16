@@ -49,7 +49,7 @@ if (!$con_mysql)
   }   
     
     //datos sobre el agrupamiento
-    $query="SELECT * FROM `agrupamientos` where id='$idAgrupamiento'";
+    $query="SELECT * FROM `$tabla_agrupamientos` where id='$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     if($num>0){
@@ -65,7 +65,7 @@ if (!$con_mysql)
     echo '<tr><td>Apellidos y nombre:</td></tr></table>';    
     
     //datos del proyecto
-    $query="SELECT * FROM `proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
+    $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
     $num=mysqli_num_rows($result);
     if($num>0){
@@ -73,7 +73,7 @@ if (!$con_mysql)
            $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
            //consulto para extraer texto del estándar
            $estandar_id = $row['estandar_id'];
-           $queryEstandar = "select estandar from estandares where id='$estandar_id'";
+           $queryEstandar = "select estandar FROM `$tabla_estandares` where id='$estandar_id'";
            $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
            $rowEstandar = mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
            echo '<br/><table style="width:40%"><tr><td style="width:90%;">Estándar de aprendizaje: '.$rowEstandar['estandar'].'</td><td>Calificación (máximo '.($row['peso']/10).' puntos):<br/><br/><br/><br/></td></tr></table>';

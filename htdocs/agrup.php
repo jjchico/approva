@@ -14,6 +14,10 @@ You cand find a copy of the GNU General Public License in the "license" director
 You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
+//config.php
+require_once('config.php');
+//functions.php
+require_once('functions.php');
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
@@ -30,14 +34,14 @@ if(isset($_POST['agrup'])){
     $id = $_POST['id'];
 
     //inPlace para cambiar nombre de agrupamiento
-                echo '<script>';
-					echo '$(\'#agrup_'.$id.'\').editInPlace({
-						url: \'inplace.php\',
-						params: \'script=agrup&field=agrupamiento&table='.$tabla_agrupamientos.'&id='.$id.'\',
-						show_buttons: true,
-						field_type: "text"
-					});';
-                echo '</script>';
+    echo '<script>';
+		echo '$(\'#agrup_'.$id.'\').editInPlace({
+			url: \'inplace.php\',
+			params: \'script=agrup&field=agrupamiento&table='.$tabla_agrupamientos.'&id='.$id.'\',
+			show_buttons: true,
+			field_type: "text"
+		});';
+    echo '</script>';
     //fin inPlace
 
     echo '<a href="#" onclick="eliminaAgrup(\''.$id.'\')" title="Eliminar Agrupamiento" ><img src="css/images/delete.png" /></a>';
@@ -56,10 +60,6 @@ if(isset($_POST['agrup'])){
         echo 'Sesión: <input style="text-align:center;" type="text" id="fecha" name="fecha" value="'.$fecha.'" onchange="goAgrupFecha(\''.$agrup.'\',\''.$id.'\')" /><br/><br/>';
     }
 
-//config.php
-require_once('config.php');
-//functions.php
-require_once('functions.php');
 //conexión dataBase
 $con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
 if (!$con_mysql)

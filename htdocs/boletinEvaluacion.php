@@ -103,7 +103,7 @@ if($num>0){
                     $pesoProyecto=($arrayPesosProyectos[$r]/100);
 
                     //seleccionamos las calificaciones que existan de este alumno en este proyecto
-                    $queryCalif="SELECT `$tabla_calificaciones`.calificacion,`$tabla_proyectos`.peso FROM `$tabla_calificaciones`,`$tabla_proyectos`,estandares
+                    $queryCalif="SELECT `$tabla_calificaciones`.calificacion,`$tabla_proyectos`.peso FROM `$tabla_calificaciones`,`$tabla_proyectos`,`$tabla_estandares`
                     where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto='$nombreProyecto' and
                     `$tabla_calificaciones`.proyecto_id = `$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                     $resultCalif=mysqli_query($con_mysql,$queryCalif)or die('ERROR:'.mysqli_error());
@@ -179,49 +179,49 @@ if($num>0){
 
                 echo '<td style="border:#000000 thin solid;text-align:center;background-color:#cccccc;">Ocasiones en las que se ha trabajado durante el período >>> </td>';
 
-                $queryCCL="select `$tabla_proyectos`.ccl FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.ccl='1' and
+                $queryCCL="select `$tabla_proyectos`.ccl FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.ccl='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCCL=mysqli_query($con_mysql,$queryCCL)or die('ERROR:'.mysqli_error());
                 $numCCL=mysqli_num_rows($resultCCL);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numCCL.'</td>';
                 $arrayComp[]=$numCCL;
 
-                $queryCMCT="select `$tabla_proyectos`.cmct FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.cmct='1' and
+                $queryCMCT="select `$tabla_proyectos`.cmct FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.cmct='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCMCT=mysqli_query($con_mysql,$queryCMCT)or die('ERROR:'.mysqli_error());
                 $numCMCT=mysqli_num_rows($resultCMCT);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numCMCT.'</td>';
                 $arrayComp[]=$numCMCT;
 
-                $queryCD="select `$tabla_proyectos`.cd FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.cd='1' and
+                $queryCD="select `$tabla_proyectos`.cd FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.cd='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCD=mysqli_query($con_mysql,$queryCD)or die('ERROR:'.mysqli_error());
                 $numCD=mysqli_num_rows($resultCD);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numCD.'</td>';
                 $arrayComp[]=$numCD;
 
-                $queryCAA="select `$tabla_proyectos`.caa FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.caa='1' and
+                $queryCAA="select `$tabla_proyectos`.caa FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.caa='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCAA=mysqli_query($con_mysql,$queryCAA)or die('ERROR:'.mysqli_error());
                 $numCAA=mysqli_num_rows($resultCAA);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numCAA.'</td>';
                 $arrayComp[]=$numCAA;
 
-                $queryCSYC="select `$tabla_proyectos`.csyc FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.csyc='1' and
+                $queryCSYC="select `$tabla_proyectos`.csyc FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.csyc='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCSYC=mysqli_query($con_mysql,$queryCSYC)or die('ERROR:'.mysqli_error());
                 $numCSYC=mysqli_num_rows($resultCSYC);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numCSYC.'</td>';
                 $arrayComp[]=$numCSYC;
 
-                $querySIEP="select `$tabla_proyectos`.siep FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.siep='1' and
+                $querySIEP="select `$tabla_proyectos`.siep FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.siep='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultSIEP=mysqli_query($con_mysql,$querySIEP)or die('ERROR:'.mysqli_error());
                 $numSIEP=mysqli_num_rows($resultSIEP);
                 echo '<td style="border:#000000 thin solid;text-align:center;">'.$numSIEP.'</td>';
                 $arrayComp[]=$numSIEP;
 
-                $queryCEC="select `$tabla_proyectos`.cec FROM `$tabla_proyectos`,`$tabla_,calificaciones` where `$tabla_proyectos`.cec='1' and
+                $queryCEC="select `$tabla_proyectos`.cec FROM `$tabla_proyectos`,`$tabla_calificaciones` where `$tabla_proyectos`.cec='1' and
                 `$tabla_proyectos`.id=`$tabla_calificaciones`.proyecto_id and `$tabla_calificaciones`.alumno_id='$idAlumno' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
                 $resultCEC=mysqli_query($con_mysql,$queryCEC)or die('ERROR:'.mysqli_error());
                 $numCEC=mysqli_num_rows($resultCEC);

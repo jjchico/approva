@@ -85,7 +85,7 @@ if (!$con_mysql)
                 echo '<th style="border:#000000 thin solid;background-color:#cccccc;">Calificación parcial</th></tr>';
                 //seleccionamos las calificaciones que existan de este alumno en este proyecto
                 $queryCalif="SELECT `$tabla_calificaciones`.calificacion,`$tabla_proyectos`.peso,`$tabla_proyectos`.ccl,`$tabla_proyectos`.cmct,`$tabla_proyectos`.cd,`$tabla_proyectos`.caa,`$tabla_proyectos`.csyc,
-                `$tabla_proyectos`.siep,`$tabla_proyectos`.cec, `$tabla_estandares`.estandar FROM `$tabla_calificaciones`,`$tabla_proyectos`,estandares
+                `$tabla_proyectos`.siep,`$tabla_proyectos`.cec, `$tabla_estandares`.estandar FROM `$tabla_calificaciones`,`$tabla_proyectos`,`$tabla_estandares`
                 where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto='$nombreProyecto' and
                 `$tabla_calificaciones`.proyecto_id = `$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
                 $resultCalif=mysqli_query($con_mysql,$queryCalif)or die('ERROR:'.mysqli_error());

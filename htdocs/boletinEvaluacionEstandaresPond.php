@@ -129,7 +129,7 @@ for($e=0;$e<count($arrayIdEstandar);$e++){
     //vamos con las medias de cada estándar
     for($c=0;$c<count($alum);$c++){
         $idAlumno = $idAlum[$c];
-     $queryCalifM = "select avg(`$tabla_calificaciones`.calificacion/`$tabla_proyectos`.peso)*100 as media FROM `$tabla_calificaciones`,`$tabla_proyectos` where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto_id=`$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id='$idEstandar' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')"; 
+     $queryCalifM = "select avg(`$tabla_calificaciones`.calificacion/`$tabla_proyectos`.peso)*100 as media FROM `$tabla_calificaciones`,`$tabla_proyectos` where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto_id=`$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id='$idEstandar' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
         $resultCalifM = mysqli_query($con_mysql,$queryCalifM) or die('ERROR:'.mysqli_error());
         $rowCalifM = mysqli_fetch_array($resultCalifM,MYSQLI_ASSOC);
         echo '<td style="background-color:#dedede;">'.round($rowCalifM['media']*$pesoEstandar,2).'</td>';
@@ -142,7 +142,7 @@ for($e=0;$e<count($arrayIdEstandar);$e++){
 echo '<tr>';
     echo '<td style="background-color:#dedede;"><big><b>Calificación Final</b></big></td>';
     for($c=0;$c<count($alum);$c++){
-
+		$notaFinal = 0;
         for($e=0;$e<count($arrayIdEstandar);$e++){
             $notaFinal += $arrayMediasPond[$e][$c];
         }

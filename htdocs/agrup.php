@@ -57,9 +57,9 @@ if(isset($_POST['agrup'])){
     }
 
 //config.php
-require('config.php');
+require_once('config.php');
 //functions.php
-require('functions.php');
+require_once('functions.php');
 //conexión dataBase
 $con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
 if (!$con_mysql)

@@ -24,7 +24,7 @@ date_default_timezone_set('Europe/Madrid');
 echo '<script>$(function(){$( "#fecha" ).datepicker({dateFormat:\'dd-mm-yy\',firstDay: 1});});</script>';
 
 //config.php
-require('config.php');
+require_once('config.php');
 
 //conexión dataBase
 $con_mysql=mysqli_connect(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD,DB_DATABASE);
@@ -85,7 +85,7 @@ if(isset($_POST['idAviso'])){
 if(isset($_POST['txtNuevaFranja'])){
 
 //functions.php
-require('functions.php');
+require_once('functions.php');
 
     //recogemos variables
     $txtNuevaFranja = $_POST['txtNuevaFranja'];
@@ -120,7 +120,7 @@ require('functions.php');
 if(isset($_POST['fecha'])){
 
 //functions.php
-require('functions.php');
+require_once('functions.php');
 
     $diaEnSemana = nombreDia(date("l", mktime(0, 0, 0, $date[1], $date[0], $date[2])));
     echo '<p>Sesión Actual: <span style="background:yellow;"><b>'.$diaEnSemana.'</b></span> <input type="text" id="fecha" name="fecha" value="'.$_POST['fecha'].'" onchange="listaDiario()" style="text-align:center;"></p>';

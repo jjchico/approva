@@ -19,9 +19,9 @@ header('Content-Type: text/html; charset=UTF-8');
 
 echo '<h3>Instalación inicial de la Plataforma de Evaluación approva ...</h3>';
 //config.php
-require('config.php');
+require_once('config.php');
 //functions.php
-require('functions.php');
+require_once('functions.php');
 //connect
 //$mysqli = new mysqli(DB_SERVER,DB_MYSQL_USER,DB_MYSQL_PASSWORD);
 

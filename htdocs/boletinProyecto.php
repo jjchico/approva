@@ -92,6 +92,12 @@ if (!$con_mysql)
                 $numCalif=mysqli_num_rows($resultCalif);
                 //si hay calificaciones
                 if($numCalif>0){
+					// inicializa arrays para acumular calificaciones de
+					// competencias
+					$arrayCCL=array(); $arrayCMCT=array(); $arrayCAA=array();
+					$arrayCD=array(); $arrayCSYC=array(); $arraySIEP=array();
+					$arrayCEC=array();
+
                     for($c=0;$c<$numCalif;$c++){
                         $rowCalif=mysqli_fetch_array($resultCalif,MYSQLI_ASSOC);
                         echo '<tr>';
@@ -182,12 +188,12 @@ if (!$con_mysql)
                     }
                     unset($arrayCalif);
                     if($arrayCCL){unset($arrayCCL);}
-                    if($arrayCCL){unset($arrayCMCT);}
-                    if($arrayCCL){unset($arrayCD);}
-                    if($arrayCCL){unset($arrayCAA);}
-                    if($arrayCCL){unset($arrayCSYC);}
-                    if($arrayCCL){unset($arraySIEP);}
-                    if($arrayCCL){unset($arrayCEC);}
+                    if($arrayCMCT){unset($arrayCMCT);}
+                    if($arrayCD){unset($arrayCD);}
+                    if($arrayCAA){unset($arrayCAA);}
+                    if($arrayCSYC){unset($arrayCSYC);}
+                    if($arraySIEP){unset($arraySIEP);}
+                    if($arrayCEC){unset($arrayCEC);}
                 }else{
                     echo '<tr><th>No existen calificaciones para este alumno y proyecto</th><th></th></tr>';
                 }

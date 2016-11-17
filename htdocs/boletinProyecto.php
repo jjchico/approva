@@ -52,7 +52,7 @@ if (!$con_mysql)
 
     //datos sobre el agrupamiento
     $query="SELECT * FROM `$tabla_agrupamientos` where id='$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     if($num>0){
         $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -65,7 +65,7 @@ if (!$con_mysql)
     //seleccionamos lista de alumnos
     //consulta alumnado agrupamiento
     $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by `alumno`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){//si hay alumnado comenzamos
             for($a=0;$a<$num;$a++){
@@ -88,7 +88,7 @@ if (!$con_mysql)
                 `$tabla_proyectos`.siep,`$tabla_proyectos`.cec, `$tabla_estandares`.estandar FROM `$tabla_calificaciones`,`$tabla_proyectos`,`$tabla_estandares`
                 where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto='$nombreProyecto' and
                 `$tabla_calificaciones`.proyecto_id = `$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
-                $resultCalif=mysqli_query($con_mysql,$queryCalif)or die('ERROR:'.mysqli_error());
+                $resultCalif=mysqli_query($con_mysql,$queryCalif)or die('ERROR:'.mysqli_error($con_mysql));
                 $numCalif=mysqli_num_rows($resultCalif);
                 //si hay calificaciones
                 if($numCalif>0){

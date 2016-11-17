@@ -75,7 +75,7 @@ if(isset($_POST['username'])){
     $pass=sha1($_POST['password']);
 
     $sql="SELECT * FROM `$tabla_user` WHERE username='".$username."'";
-    $result=mysqli_query($con_mysql,$sql) or die(mysqli_error());
+    $result=mysqli_query($con_mysql,$sql) or die(mysqli_error($con_mysql));
     $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
 
     //if username exists
@@ -115,7 +115,7 @@ if(isset($_POST['addAgrup'])){
     $levelAgrup = $_POST['txtLevel'];
     //insertamos en base de datos
     $query="insert into `$tabla_agrupamientos` (agrupamiento, curso, materia, nivel) values('$nameAgrup','$cursoAgrup','$nameSubj','$levelAgrup')";
-    $result=mysqli_query($con_mysql,$query) or die(mysqli_error());
+    $result=mysqli_query($con_mysql,$query) or die(mysqli_error($con_mysql));
 }
 
 if(isset($_POST['idAgrupamientoElimina'])){
@@ -123,14 +123,14 @@ if(isset($_POST['idAgrupamientoElimina'])){
     $idAgrupamientoElimina = $_POST['idAgrupamientoElimina'];
     //borramos el agrupamiento de la base de datos
     $query="DELETE FROM `$tabla_agrupamientos` WHERE `$tabla_agrupamientos`.id = '$idAgrupamientoElimina'";
-    $result=mysqli_query($con_mysql,$query) or die(mysqli_error());
+    $result=mysqli_query($con_mysql,$query) or die(mysqli_error($con_mysql));
     //borramos estándares del agrupamiento de la base de datos
     $query="DELETE FROM `$tabla_estandares` WHERE `$tabla_estandares`.agrupamiento_id = '$idAgrupamientoElimina'";
-    $result=mysqli_query($con_mysql,$query) or die(mysqli_error());
+    $result=mysqli_query($con_mysql,$query) or die(mysqli_error($con_mysql));
     //borramos proyectos del agrupamiento de la base de datos
         //primero seleccionamos proyectos del agrupamiento
         $query="SELECT * from `$tabla_proyectos` where `$tabla_proyectos`.agrupamiento_id = '$idAgrupamientoElimina'";
-        $result=mysqli_query($con_mysql,$query) or die(mysqli_error());
+        $result=mysqli_query($con_mysql,$query) or die(mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             for($e=0;$e<$num;$e++){
@@ -138,13 +138,13 @@ if(isset($_POST['idAgrupamientoElimina'])){
                 $idProyectoElimina = $row['id'];
                 //borramos las calificaciones de este proyecto
                 $eliminaCal="DELETE FROM `$tabla_calificaciones` WHERE `$tabla_calificaciones.proyecto_id = '$idProyectoElimina'";
-                $resultElimina=mysqli_query($con_mysql,$eliminaCal)or die('ERROR:'.mysqli_error());
+                $resultElimina=mysqli_query($con_mysql,$eliminaCal)or die('ERROR:'.mysqli_error($con_mysql));
             }
 
         }
         //ahora ya borramos los proyectos del agrupamiento
         $query="DELETE FROM `$tabla_proyectos` WHERE `$tabla_proyectos`.agrupamiento_id = '$idAgrupamientoElimina'";
-	    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+	    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 }
 
 

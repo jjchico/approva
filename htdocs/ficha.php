@@ -37,7 +37,7 @@ if(isset($_POST['idAlumno'])){
     //consultamos nombre de alumno y agrupamiento en el que está matriculado
     $query = "SELECT $tabla_alumnado.alumno, $tabla_alumnado.agrupamiento_id, $tabla_agrupamientos.agrupamiento, $tabla_agrupamientos.curso, $tabla_agrupamientos.materia, $tabla_agrupamientos.nivel FROM `$tabla_alumnado`, `$tabla_agrupamientos` WHERE $tabla_alumnado.id='$idAlumno' and $tabla_alumnado.agrupamiento_id = $tabla_agrupamientos.id";
 
-    $result = mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result = mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 
 	if(mysqli_num_rows($result)>0){
         $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -53,7 +53,7 @@ if(isset($_POST['idAlumno'])){
         //montamos select con todos los alumnos del agrupamiento
         echo '<select id="selAlumAgrup" name="selAlumAgrup" onchange="goFichaSelect()" style="width:200px;margin:auto;">';
         $queryAlum = "select * FROM `$tabla_alumnado` where agrupamiento_id='$idAgrupamiento' order by alumno";
-        $resultAlum = mysqli_query($con_mysql,$queryAlum)or die('ERROR:'.mysqli_error());
+        $resultAlum = mysqli_query($con_mysql,$queryAlum)or die('ERROR:'.mysqli_error($con_mysql));
         $numAlum = mysqli_num_rows($resultAlum);
         for($a=0;$a<$numAlum;$a++){
             $rowAlum = mysqli_fetch_array($resultAlum,MYSQLI_ASSOC);
@@ -72,7 +72,7 @@ if(isset($_POST['idAlumno'])){
 
         //la asistencia
         $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id = '$idAlumno'";
-        $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
+        $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
         $numAsistencia = mysqli_num_rows($resultAsistencia);
         if($numAsistencia>0){
             for($f=0;$f<$numAsistencia;$f++){

@@ -54,18 +54,18 @@ if(isset($_POST['textoDiario'])){
 
     //vamos a consultar si ya hay contenido en la misma sesión
     $queryDiario="select * FROM `$tabla_diario` where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
-    $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error());
+    $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error($con_mysql));
     if(mysqli_num_rows($resultDiario)>0){
         $rowDiario=mysqli_fetch_array($resultDiario,MYSQLI_ASSOC);
         $idDiarioActualiza=$rowDiario['id'];
         //actualizamos
         $query="update `$tabla_diario` set diario = '$textoDiario' where id='$idDiarioActualiza';";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         if($result){echo '<script>alert(\'Contenido de la sesión actualizado\')</script>';}
     }else{
         //guardamos en base de datos
         $query="insert into `$tabla_diario` values(NULL,'$mysqlDate','$idAgrupamiento','$textoDiario');";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         if($result){echo '<script>alert(\'Contenido de la sesión guardado\')</script>';}
     }
 }
@@ -76,7 +76,7 @@ if(isset($_POST['idAviso'])){
 
     $idAvisoEliminar = $_POST['idAviso'];
     $queryEliminaAviso = "delete FROM `$tabla_diario` where id='$idAvisoEliminar'";
-    $resultEliminaAviso=mysqli_query($con_mysql,$queryEliminaAviso)or die('ERROR:'.mysqli_error());
+    $resultEliminaAviso=mysqli_query($con_mysql,$queryEliminaAviso)or die('ERROR:'.mysqli_error($con_mysql));
         if($resultEliminaAviso){echo '<script>alert(\'Entrada en diario eliminada\')</script>';}
 }
 //fin eliminar entrada de diario
@@ -96,14 +96,14 @@ require_once('functions.php');
         $nombreAgrupGrabar = $_POST['nombreAgrup_'.$g.''];
         $espacioGrabar = $_POST['txtEspacio_'.$g.''];
         $queryGrabaHorario = "insert into `$tabla_horario` values(NULL,'$txtNuevaFranja','$g','$agrupGrabar','$nombreAgrupGrabar','$espacioGrabar');";
-        $resultGrabaHorario=mysqli_query($con_mysql,$queryGrabaHorario)or die('ERROR:'.mysqli_error());
+        $resultGrabaHorario=mysqli_query($con_mysql,$queryGrabaHorario)or die('ERROR:'.mysqli_error($con_mysql));
     }
 }
 //fin grabar nueva franja
 
 //selección de agrupamientos para tenerlos en arrays
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
                 for($m=0;$m<$num;$m++){
@@ -166,7 +166,7 @@ echo '</tr>';
 
 //consulto si hay horario
 $queryFranjas = "select distinct franja FROM `$tabla_horario`";
-$resultFranjas = mysqli_query($con_mysql,$queryFranjas)or die('ERROR:'.mysqli_error());
+$resultFranjas = mysqli_query($con_mysql,$queryFranjas)or die('ERROR:'.mysqli_error($con_mysql));
 $numFranjas = mysqli_num_rows($resultFranjas);
 if($numFranjas>0){
     //monto bucle para ir consultando cada franja
@@ -177,7 +177,7 @@ if($numFranjas>0){
         echo '<td style="text-align:center;background:#dedede;"><b>'.$franja.'</b></td>';
         for($d=0;$d<5;$d++){
             $queryF = "select * FROM `$tabla_horario` where franja = '$franja' and dia='$d'";
-            $resultF = mysqli_query($con_mysql,$queryF)or die('ERROR:'.mysqli_error());
+            $resultF = mysqli_query($con_mysql,$queryF)or die('ERROR:'.mysqli_error($con_mysql));
             $rowF = mysqli_fetch_array($resultF,MYSQLI_ASSOC);
             if($rowF['agrupamiento']=='RECREO'){
                 echo '<td style="text-align:center;background:#33cc33;color:white;vertical-align:middle;"><big><b>'.$rowF['agrupamiento'].'</b></big><br/><br/>'.$rowF['espacio'].'</td>';
@@ -344,7 +344,7 @@ if(isset($_POST['nombreAgrupamiento'])){
     echo '<p style="text-align:center;">Contenido de la sesión: <input size="20" style="text-align:center;" type="text" id="txtSesionDestino" name="txtSesionDestino" value="'.$_POST['fecha'].'" />&nbsp;<b><span id="spanNombreAgrup" name="spanNombreAgrup">'.$nombreAgrupamiento.'</span></b><input type="hidden" id="hidIdAgrupamiento" name="hidIdAgrupamiento" value="'.$idAgrupamiento.'" /></p>';
     //vamos a consultar si para este agrupamiento y fecha hay sesión guardada
     $queryDiario="select * FROM `$tabla_diario` where agrupamiento_id='$idAgrupamiento' and sesion='$mysqlDate'";
-    $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error());
+    $resultDiario=mysqli_query($con_mysql,$queryDiario)or die('ERROR:'.mysqli_error($con_mysql));
     if(mysqli_num_rows($resultDiario)>0){//si hay sesión, presento los datos
         $row=mysqli_fetch_array($resultDiario,MYSQLI_ASSOC);
         echo '<p style="text-align:center;"><textarea name="taDiario" id="taDiario" cols="120" rows="10">'.$row['diario'].'</textarea></p>';

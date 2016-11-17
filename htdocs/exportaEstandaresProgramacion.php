@@ -37,7 +37,7 @@ if (!$con_mysql)
 
 //consultamos los agrupamientos
 $query="select * from `$tabla_agrupamientos`";
-$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 $num=mysqli_num_rows($result);
     if($num>0){
         for($a=0;$a<$num;$a++){
@@ -53,7 +53,7 @@ $num=mysqli_num_rows($result);
 
             //ahora consulto los estándares de este agrupamiento y los listo
             $queryA="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idAgrup'";
-            $resultA=mysqli_query($con_mysql,$queryA)or die('ERROR:'.mysqli_error());
+            $resultA=mysqli_query($con_mysql,$queryA)or die('ERROR:'.mysqli_error($con_mysql));
             $numA=mysqli_num_rows($resultA);
             if($numA>0){
                 for($f=0;$f<$numA;$f++){

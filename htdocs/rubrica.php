@@ -42,7 +42,7 @@ $nombreProyecto = $_GET['nombreProyecto'];
 //montar tabla: por filas, los alumnos, por columnas, las casillas de la rúbrica
 $queryEstandares="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.peso FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and 
 `$tabla_proyectos`.agrupamiento_id = '$idAgrupamiento' and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
-$resultEstandares=mysqli_query($con_mysql,$queryEstandares)or die('ERROR:'.mysqli_error());
+$resultEstandares=mysqli_query($con_mysql,$queryEstandares)or die('ERROR:'.mysqli_error($con_mysql));
 $numEstandares=mysqli_num_rows($resultEstandares);
 if($numEstandares>0){
     for($e=0;$e<$numEstandares;$e++){
@@ -67,7 +67,7 @@ if($numEstandares>0){
 
             //datos para la lista de alumnos
             $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
             $num=mysqli_num_rows($result);
             for($a=0;$a<$num;$a++){
                 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -77,7 +77,7 @@ if($numEstandares>0){
                     //compruebo si ya tiene nota para el estándar de aprendizaje en cuestión
                     $querySelect = "select calificacion FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$idProyecto' and
                     proyecto='$nombreProyecto'";
-                    $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
+                    $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error($con_mysql));
                     $numSelect = mysqli_num_rows($resultSelect);
                     //si hay nota, la clasifico para colocarla en la celda correspondiente
                     if($numSelect>0){

@@ -76,7 +76,7 @@ if(isset($_GET['nombreAgrupamiento'])){
             $queryGrabaProyecto="INSERT INTO `$tabla_proyectos` (`id`, `agrupamiento_id`, `estandar_id`, `proyecto`, `fecha`, `num`, `peso`,
         `ccl`, `cmct`, `cd`, `caa`, `csyc`, `siep`, `cec`) VALUES (NULL, '$idAgrupamiento', '$idEstandar','$nombreProyecto',now(),'1', '100',
         '$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec');";
-            $resultGrabaProyecto=mysqli_query($con_mysql,$queryGrabaProyecto)or die('ERROR:'.mysqli_error());
+            $resultGrabaProyecto=mysqli_query($con_mysql,$queryGrabaProyecto)or die('ERROR:'.mysqli_error($con_mysql));
             //si ha grabado bien el proyecto, vamos a grabar ahora las notas
             if($resultGrabaProyecto){
                 $idProyecto = mysqli_insert_id($con_mysql);
@@ -84,7 +84,7 @@ if(isset($_GET['nombreAgrupamiento'])){
         }
             //seleccionamos alumnado del agrupamiento
             $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
             $num=mysqli_num_rows($result);
             for($a=0;$a<$num;$a++){
                 $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -94,17 +94,17 @@ if(isset($_GET['nombreAgrupamiento'])){
                     $calificacion = $_POST[''.$idAlumno.''];
                     //compruebo si ya tiene nota
                     $querySelect = "select id FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$idProyecto'";
-                    $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
+                    $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error($con_mysql));
                     $numSelect = mysqli_num_rows($resultSelect);
                     //si hay nota, edito
                     if($numSelect>0){
                         $rowSelect = mysqli_fetch_array($resultSelect,MYSQLI_ASSOC);
                         $idSelect = $rowSelect['id'];
                         $queryUpdate = "update `$tabla_calificaciones` set calificacion = '$calificacion' where id = '$idSelect'";
-                        $resultUpdate = mysqli_query($con_mysql,$queryUpdate)or die('ERROR:'.mysqli_error());
+                        $resultUpdate = mysqli_query($con_mysql,$queryUpdate)or die('ERROR:'.mysqli_error($con_mysql));
                     }else{//si no hay nota, inserto
                         $queryInsert="insert into `$tabla_calificaciones` values(NULL,'$idAlumno','$idProyecto','$nombreProyecto','$calificacion',now())";
-                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error());
+                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error($con_mysql));
                     }
                 }//fin se envió nota
             }//fin de for
@@ -129,7 +129,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
 //select con agrupamientos
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             echo '<p style="text-align:center;"><select id="selAgrup" name="selAgrup" onchange="listaEstandares2()"></p>';
@@ -154,7 +154,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
         //seleccionar estándar de aprendizaje
 		if(isset($idAgrupamiento)) {
 	        $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idAgrupamiento'";
-	        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+	        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 	        $num=mysqli_num_rows($result);
 	        if($num>0){
 	            echo '<br/><br/><select id="selEstandarCreaProyecto" name="selEstandarCreaProyecto" onchange="estandarToText()">';
@@ -174,7 +174,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
             //el select para discriminar si calificaremos un proyecto nuevo o editaremos uno ya existente
             if(isset($idEstandar)){
                 $queryP="SELECT * FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and estandar_id='$idEstandar' order by fecha";
-                $resultP=mysqli_query($con_mysql,$queryP)or die('ERROR:'.mysqli_error());
+                $resultP=mysqli_query($con_mysql,$queryP)or die('ERROR:'.mysqli_error($con_mysql));
                 $numP=mysqli_num_rows($resultP);
                 if($numP>0){//si ya se ha calificado antes este estándar, debemos elegir
                     echo '<select id="selProyecto" name="selProyecto" onchange="presentaCalifEstandar()">';
@@ -195,7 +195,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
                     echo '<br/><br/>';
 
                     $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-                    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+                    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
                     $num=mysqli_num_rows($result);
                     if($num>0){
                         if(isset($idProyecto)){
@@ -209,7 +209,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
 
                         if(isset($idProyecto)){//venimos de grabar
                             $querySelect = "select * FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$idProyecto'";
-                            $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error());
+                            $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error($con_mysql));
                             $numSelect = mysqli_num_rows($resultSelect);
                             //si hay nota, la pongo
                             if($numSelect>0){
@@ -273,7 +273,7 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
 
                     //seleccionamos alumnado del agrupamiento
                     $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-                    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+                    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
                     $num=mysqli_num_rows($result);
                     if($num>0){
                         echo '<br/><br/><table style="margin:auto;text-align:center;" id="califEstandaresTable" name="califEstandaresTable">';

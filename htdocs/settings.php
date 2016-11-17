@@ -41,7 +41,7 @@ if(isset($_POST['idAgrupamientoOrigen'])&&isset($_POST['idAgrupamientoDestino'])
     //seleccionamos los estándares de aprendizaje del agrupamiento origen
     //seleccionar estándares para el agrupamiento seleccionado
                 $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idOrigen'";
-                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
                 $num=mysqli_num_rows($result);
                 if($num>0){
                     for($e=0;$e<$num;$e++){
@@ -49,7 +49,7 @@ if(isset($_POST['idAgrupamientoOrigen'])&&isset($_POST['idAgrupamientoDestino'])
                         $estandar = $row['estandar'];
                         //ahora lo grabo con el id del agrupamiento destino
                         $queryInsert="INSERT INTO `$tabla_estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$idDestino', '$estandar');";
-                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error());
+                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error($con_mysql));
                     }
                 //doy aviso
                 echo '<script>alert(\'Estándares Copiados. Compruebe que así es en la opción Estándares.\');</script>';
@@ -73,7 +73,7 @@ echo '<h3>Copiar estándares de aprendizaje</h3>';
 //select con agrupamientos origen
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){            
             echo '<select id="selAgrupOrigen" name="selAgrupOrigen">';
@@ -93,7 +93,7 @@ print '<br/><br/>';
 //select con agrupamientos destino
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){            
             echo '<select id="selAgrupDestino" name="selAgrupDestino" onchange="copiaEstandares()">';

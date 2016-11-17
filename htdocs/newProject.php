@@ -39,7 +39,7 @@ if (!$con_mysql)
 if(isset($_POST['delete'])){
     $idEstandarEliminar=$_POST['delete'];
     $query="delete FROM `$tabla_proyectos` where id='$idEstandarEliminar'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 }
 
 //si hemos enviado formulario, grabamos
@@ -61,7 +61,7 @@ if(isset($_GET['save'])){
     $query="INSERT INTO `$tabla_proyectos` (`id`, `agrupamiento_id`, `estandar_id`, `proyecto`, `fecha`, `num`, `peso`,
     `ccl`, `cmct`, `cd`, `caa`, `csyc`, `siep`, `cec`) VALUES (NULL, '$idAgrupamiento', '$idEstandar','$nombreProyecto',now(),'$numItems', '$pesoEstandar',
     '$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec');";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     
     if($result){
         echo '<script>alert("Se ha grabado la información en el proyecto. Puede darlo por concluido o seguir grabando en el mismo proyecto otro estándar de aprendizaje");</script>';
@@ -78,7 +78,7 @@ if(isset($_POST['nombreProyecto'])){
     $nombreProyecto = $_POST['nombreProyecto'];
     //vamos a comprobar si existe el proyecto
     $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     if($num>0){//si existe cargamos valores en variables para ofrecer tabla con información de cómo va el proyecto
         echo '<span>Planteamiento actual del proyecto <b>'.$nombreProyecto.'</b></span>';
@@ -97,7 +97,7 @@ if(isset($_POST['nombreProyecto'])){
                 echo '<td>';
                     $estandar_id = $row['estandar_id'];
                     $queryEstandar = "select estandar FROM `$tabla_estandares` where id='$estandar_id'";
-                    $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
+                    $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error($con_mysql));
                     $rowEstandar = mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
                     echo $rowEstandar['estandar'];
                 echo '</td>';
@@ -123,7 +123,7 @@ echo '<form id="formNewProject" name="formNewProject">';
 //select con agrupamientos
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){            
             echo '<select id="selAgrupCreaProyecto" name="selAgrupCreaProyecto" onchange="listaEstandaresCreaProyecto()">';
@@ -157,7 +157,7 @@ echo '<br/><br/>';
 if(isset($nombreProyecto)){
     //seleccionar estándar de aprendizaje
     $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     if($num>0){
         echo '<select id="selEstandarCreaProyecto" name="selEstandarCreaProyecto" onchange="estandarToText2()">';

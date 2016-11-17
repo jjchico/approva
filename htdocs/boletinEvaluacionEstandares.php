@@ -59,7 +59,7 @@ $fechaFinM=date("Y-m-d", strtotime($fechaFin) );
 
 //recojo los id de los estándares
 $query="SELECT distinct estandar_id FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and (fecha between '$fechaIniM' and '$fechaFinM')";
-$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 $num=mysqli_num_rows($result);
 for($i=0;$i<$num;$i++){
     $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -71,7 +71,7 @@ for($i=0;$i<$num;$i++){
 
 //selecciono alumnado del agrupamiento
 $queryAlum="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-$resultAlum=mysqli_query($con_mysql,$queryAlum)or die('ERROR:'.mysqli_error());
+$resultAlum=mysqli_query($con_mysql,$queryAlum)or die('ERROR:'.mysqli_error($con_mysql));
 $numAlum=mysqli_num_rows($resultAlum);
 for($a=0;$a<$numAlum;$a++){
     $rowAlum = mysqli_fetch_array($resultAlum,MYSQLI_ASSOC);
@@ -95,7 +95,7 @@ for($e=0;$e<count($arrayIdEstandar);$e++){
     $idEstandar = $arrayIdEstandar[$e];
     //selecciono los proyectos realizados por el estándar en el período
     $queryEstandar="select `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.proyecto,`$tabla_proyectos`.fecha FROM `$tabla_estandares`,`$tabla_proyectos` where `$tabla_proyectos`.estandar_id='$idEstandar' and `$tabla_proyectos`.estandar_id=`$tabla_estandares`.id and `$tabla_proyectos`.agrupamiento_id='$idAgrupamiento' and (`$tabla_proyectos`.fecha between '$fechaIniM' and '$fechaFinM') order by `$tabla_proyectos`.fecha";
-    $resultEstandar=mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
+    $resultEstandar=mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error($con_mysql));
     $numEstandar=mysqli_num_rows($resultEstandar);
     for($n=0;$n<$numEstandar;$n++){
         $rowEstandar=mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
@@ -109,7 +109,7 @@ for($e=0;$e<count($arrayIdEstandar);$e++){
         for($c=0;$c<count($alum);$c++){
             $idAlumno = $idAlum[$c];
             $queryCalif = "select `$tabla_calificaciones`.calificacion,`$tabla_proyectos`.peso FROM `$tabla_calificaciones`,`$tabla_proyectos` where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto_id='$idProyecto' and `$tabla_calificaciones`.proyecto_id=`$tabla_proyectos`.id and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
-            $resultCalif = mysqli_query($con_mysql,$queryCalif) or die('ERROR:'.mysqli_error());
+            $resultCalif = mysqli_query($con_mysql,$queryCalif) or die('ERROR:'.mysqli_error($con_mysql));
             $numCalif = mysqli_num_rows($resultCalif);
             $rowCalif = mysqli_fetch_array($resultCalif,MYSQLI_ASSOC);
             if($numCalif>0){
@@ -125,7 +125,7 @@ for($e=0;$e<count($arrayIdEstandar);$e++){
     for($c=0;$c<count($alum);$c++){
         $idAlumno = $idAlum[$c];
      $queryCalifM = "select avg(`$tabla_calificaciones`.calificacion/`$tabla_proyectos`.peso)*100 as media FROM `$tabla_calificaciones`,`$tabla_proyectos` where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto_id=`$tabla_proyectos`.id and `$tabla_proyectos`.estandar_id='$idEstandar' and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
-        $resultCalifM = mysqli_query($con_mysql,$queryCalifM) or die('ERROR:'.mysqli_error());
+        $resultCalifM = mysqli_query($con_mysql,$queryCalifM) or die('ERROR:'.mysqli_error($con_mysql));
         $rowCalifM = mysqli_fetch_array($resultCalifM,MYSQLI_ASSOC);
         echo '<td style="background-color:#dedede;">'.round($rowCalifM['media'],2).'</td>';
     }//fin de for calificación media del estándar
@@ -138,7 +138,7 @@ echo '<tr>';
     for($c=0;$c<count($alum);$c++){
         $idAlumno = $idAlum[$c];
         $queryCalifM = "select avg(`$tabla_calificaciones`.calificacion/`$tabla_proyectos`.peso)*100 as media FROM `$tabla_calificaciones`,`$tabla_proyectos` where `$tabla_calificaciones`.alumno_id='$idAlumno' and `$tabla_calificaciones`.proyecto_id=`$tabla_proyectos`.id and (`$tabla_calificaciones`.fecha between '$fechaIniM' and '$fechaFinM')";
-        $resultCalifM = mysqli_query($con_mysql,$queryCalifM) or die('ERROR:'.mysqli_error());
+        $resultCalifM = mysqli_query($con_mysql,$queryCalifM) or die('ERROR:'.mysqli_error($con_mysql));
         $rowCalifM = mysqli_fetch_array($resultCalifM,MYSQLI_ASSOC);
         echo '<td style="background-color:#dedede;text-align:center;"><big><b>'.round($rowCalifM['media'],2).'</b></big></td>';
     }

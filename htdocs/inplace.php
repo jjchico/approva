@@ -53,7 +53,7 @@ if($script=='agrup'){
 		$id=$_POST['id'];
 		$query="update ".$table." set ".$field."='$value' where id='$id'";
 	}
-	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 	if($result){
 		if($field=='alumno'){echo '<big><b>'.$value.'</b></big>';}
         if($field=='agrupamiento'){echo '<h1>'.$value.'</h1>';}
@@ -69,7 +69,7 @@ if($script=='estandar'){
 		$id=$_POST['id'];
 		$query="update ".$table." set ".$field."='$value' where id='$id'";
 	}
-	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+	$result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 	if($result){
 		echo $value;
 	}else{
@@ -81,7 +81,7 @@ if($script=='project'){
     $idAgrupamiento = $_POST['idAgrupamiento'];
     $nombreProyecto = $_POST['proyecto'];
     $query="update `$tabla_proyectos` set proyecto='$value' where agrupamiento_id='$idAgrupamiento' and proyecto='$nombreProyecto'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     if($result){
 		echo '<b>'.$value.'</b>';
 	}else{
@@ -92,7 +92,7 @@ if($script=='project'){
 if($script=='projectPeso'){
     $idProyecto = $_POST['idProyecto'];
     $query="update `$tabla_proyectos` set peso='$value' where id='$idProyecto'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     if($result){
 		echo '<b>'.$value.'</b>';
 	}else{

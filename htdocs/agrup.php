@@ -73,10 +73,10 @@ die("Connection error: " . mysqli_connect_error());
         //borramos de la base de datos
 
         $queryDelAlum="DELETE FROM `$tabla_alumnado` WHERE `$tabla_alumnado`.id = '$idAlumnoElimina'";
-        $resultDelAlum=mysqli_query($con_mysql,$queryDelAlum)or die('ERROR:'.mysqli_error());
+        $resultDelAlum=mysqli_query($con_mysql,$queryDelAlum)or die('ERROR:'.mysqli_error($con_mysql));
 
         $queryDelAlumCalif="DELETE FROM `$tabla_calificaciones` WHERE `$tabla_calificaciones`.alumno_id = '$idAlumnoElimina'";
-        $resultDelAlumCalif=mysqli_query($con_mysql,$queryDelAlumCalif)or die('ERROR:'.mysqli_error());
+        $resultDelAlumCalif=mysqli_query($con_mysql,$queryDelAlumCalif)or die('ERROR:'.mysqli_error($con_mysql));
     }
     //fin petición eliminar alumno
 
@@ -86,7 +86,7 @@ die("Connection error: " . mysqli_connect_error());
         $idAgrupCambio = $_POST['idAgrupCambio'];
         //lo cambiamos de agrupamiento
         $queryCambiaAlum="UPDATE `$tabla_alumnado` SET agrupamiento_id = '$idAgrupCambio' WHERE `$tabla_alumnado`.id = '$idAlumnoCambia'";
-        $resultCambiaAlum=mysqli_query($con_mysql,$queryCambiaAlum)or die('ERROR:'.mysqli_error());
+        $resultCambiaAlum=mysqli_query($con_mysql,$queryCambiaAlum)or die('ERROR:'.mysqli_error($con_mysql));
     }
     //fin petición eliminar alumno
 
@@ -96,7 +96,7 @@ die("Connection error: " . mysqli_connect_error());
         //insertamos en base de datos
 
         $query="INSERT INTO `$tabla_alumnado` (`id`, `agrupamiento_id`, `alumno`) VALUES (NULL, '$id', '$nombreAlum');";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     }
     //fin petición matricular un alumno
 
@@ -109,19 +109,19 @@ die("Connection error: " . mysqli_connect_error());
         if($asistencia=='0'){
             //borramos
             $queryEliminaAsistencia = "delete FROM `$tabla_asistencia` where alumno_id='$idAlumno' and fecha='$mysqlDate'";
-            $resultEliminaAsistencia = mysqli_query($con_mysql,$queryEliminaAsistencia)or die('ERROR:'.mysqli_error());
+            $resultEliminaAsistencia = mysqli_query($con_mysql,$queryEliminaAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
         }else{
             //consultamos si hay dato
             $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumno' and fecha='$mysqlDate'";
-            $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
+            $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
             if(mysqli_num_rows($resultAsistencia)>0){
                 //actualizo
                 $queryActualizaAsistencia = "update `$tabla_asistencia` set tipo = '$asistencia' where alumno_id='$idAlumno' and fecha='$mysqlDate'";
-                $resultActualizaAsistencia = mysqli_query($con_mysql,$queryActualizaAsistencia)or die('ERROR:'.mysqli_error());
+                $resultActualizaAsistencia = mysqli_query($con_mysql,$queryActualizaAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
             }else{
                 //inserto
                 $queryInsertaAsistencia="INSERT INTO `$tabla_asistencia` (`id`, `alumno_id`, `tipo`,`fecha`) VALUES (NULL, '$idAlumno', '$asistencia','$mysqlDate');";
-                $resultInsertaAsistencia=mysqli_query($con_mysql,$queryInsertaAsistencia)or die('ERROR:'.mysqli_error());
+                $resultInsertaAsistencia=mysqli_query($con_mysql,$queryInsertaAsistencia) or die('ERROR:'.mysqli_error($con_mysql));
             }
         }
     }
@@ -130,7 +130,7 @@ die("Connection error: " . mysqli_connect_error());
 
     //consulta alumnado agrupamiento
     $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$id' order by `alumno`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             echo '<table><tr><td>';
@@ -155,7 +155,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '<option value="0">Cambio agrupamiento</option>';
                         //consulta de agrupamientos para listar
                         $queryAgCambio="SELECT * FROM `$tabla_agrupamientos` where id <> '$id' order by `agrupamiento`";
-                        $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error());
+                        $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error($con_mysql));
                         $numAgCambio=mysqli_num_rows($resultAgCambio);
                         if($numAgCambio>0){
                             for($ac=0;$ac<$numAgCambio;$ac++){
@@ -167,7 +167,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo ' ';
                     //consultamos si hay dato
                     $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
-                    $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
+                    $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
                     if(mysqli_num_rows($resultAsistencia)>0){
                         $rowAsistencia = mysqli_fetch_array($resultAsistencia,MYSQLI_ASSOC);
                         $tipoAsistencia = $rowAsistencia['tipo'];
@@ -227,7 +227,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo '<option value="0">Cambio agrupamiento</option>';
                         //consulta de agrupamientos para listar
                         $queryAgCambio="SELECT * FROM `$tabla_agrupamientos` where id <> '$id' order by `agrupamiento`";
-                        $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error());
+                        $resultAgCambio=mysqli_query($con_mysql,$queryAgCambio)or die('ERROR:'.mysqli_error($con_mysql));
                         $numAgCambio=mysqli_num_rows($resultAgCambio);
                         if($numAgCambio>0){
                             for($ac=0;$ac<$numAgCambio;$ac++){
@@ -239,7 +239,7 @@ die("Connection error: " . mysqli_connect_error());
                     echo ' ';
                     //consultamos si hay dato
                     $queryAsistencia = "select * FROM `$tabla_asistencia` where alumno_id='$idAlumEdita' and fecha='$mysqlDate'";
-                    $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error());
+                    $resultAsistencia = mysqli_query($con_mysql,$queryAsistencia)or die('ERROR:'.mysqli_error($con_mysql));
                     if(mysqli_num_rows($resultAsistencia)>0){
                         $rowAsistencia = mysqli_fetch_array($resultAsistencia,MYSQLI_ASSOC);
                         $tipoAsistencia = $rowAsistencia['tipo'];

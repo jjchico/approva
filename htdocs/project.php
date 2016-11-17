@@ -50,18 +50,18 @@ if(isset($_POST['nombreProyecto'])){
 if(isset($_POST['deleteProyecto'])){
     //seleccionamos proyectos
     $query="select * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     for($p=0;$p<$num;$p++){
         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
         $idProyectoEliminar=$row['id'];
         //borramos las calificaciones de este id
         $queryDelCal="delete FROM `$tabla_calificaciones` where proyecto_id='$idProyectoEliminar'";
-        $resultDelCal=mysqli_query($con_mysql,$queryDelCal)or die('ERROR:'.mysqli_error());
+        $resultDelCal=mysqli_query($con_mysql,$queryDelCal)or die('ERROR:'.mysqli_error($con_mysql));
     }
     //borramos en la tabla proyectos
     $queryDelPro="delete FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-    $resultDelPro=mysqli_query($con_mysql,$queryDelPro)or die('ERROR:'.mysqli_error());
+    $resultDelPro=mysqli_query($con_mysql,$queryDelPro)or die('ERROR:'.mysqli_error($con_mysql));
 }
 
 //si he solicitado replicar el proyecto
@@ -70,7 +70,7 @@ if(isset($_POST['numReplicas'])){
     $numReplicas = $_POST['numReplicas'];
     //consulto características del proyecto
     $query="select * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     for($p=0;$p<$num;$p++){
         $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
@@ -88,7 +88,7 @@ if(isset($_POST['numReplicas'])){
         for($r=0;$r<$numReplicas;$r++){
             $replica = ''.$nombreProyecto.'_replica_'.$r.'';
             $queryReplica = "insert into `$tabla_proyectos` values(NULL,'$idAgrupamiento','$estandarReplicar','$replica',NOW(),'$numItemsReplicar','$pesoReplicar','$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec')";
-            $resultReplica = mysqli_query($con_mysql,$queryReplica)or die('ERROR:'.mysqli_error());
+            $resultReplica = mysqli_query($con_mysql,$queryReplica)or die('ERROR:'.mysqli_error($con_mysql));
         }
     }//fin de for
     if($resultReplica){
@@ -102,7 +102,7 @@ if(isset($_POST['idAgrupamientoDestino'])){
     $idAgrupamientoDestino = $_POST['idAgrupamientoDestino'];
     //seleccionamos todos los registros del proyecto y lo vamos guardando en la base de datos con el id del agrupamiento de destino
     $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             for($n=0;$n<$num;$n++){
@@ -121,7 +121,7 @@ if(isset($_POST['idAgrupamientoDestino'])){
                 $queryCopia="INSERT INTO `$tabla_proyectos` (`id`, `agrupamiento_id`, `estandar_id`, `proyecto`, `fecha`, `num`, `peso`,
     `ccl`, `cmct`, `cd`, `caa`, `csyc`, `siep`, `cec`) VALUES (NULL, '$idAgrupamientoDestino', '$estandar_id','$nombreProyecto',now(),'$numItems', '$peso',
     '$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec');";
-                $resultCopia=mysqli_query($con_mysql,$queryCopia)or die('ERROR:'.mysqli_error());
+                $resultCopia=mysqli_query($con_mysql,$queryCopia)or die('ERROR:'.mysqli_error($con_mysql));
             }//fin for
             if($resultCopia){
                 echo '<script>alert("Se ha copiado el proyecto. Puede consultarlo seleccionando el agrupamiento");</script>';
@@ -134,13 +134,13 @@ if(isset($_POST['idAgrupamientoDestino'])){
 if(isset($_POST['delete'])){
     $idEstandarEliminar=$_POST['delete'];
     $query="delete FROM `$tabla_proyectos` where id='$idEstandarEliminar'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 }
 
 //select con agrupamientos
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             echo '<select id="selAgrupProyectos" name="selAgrupProyectos" onchange="listaProyectos()">';
@@ -163,7 +163,7 @@ echo '<br/><br/>';
 if(isset($idAgrupamiento)){
     //consultamos los proyecos
     $query="SELECT distinct proyecto FROM `$tabla_proyectos` where agrupamiento_id = '$idAgrupamiento'";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     if($num>0){
         echo '<select id="selProyecto" name="selProyecto" onchange="listaDetallesProyecto(\''.$idAgrupamiento.'\')">';
@@ -187,7 +187,7 @@ echo '<br/><br/>';
 //presentamos información del planteamiento del proyecto y enlace a generación del documento
 if(isset($nombreProyecto)){
     $query="SELECT * FROM `$tabla_proyectos` where proyecto='$nombreProyecto' and agrupamiento_id='$idAgrupamiento'";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
 
@@ -221,7 +221,7 @@ if(isset($nombreProyecto)){
                     $idProyecto = $row['id'];
                     $estandar_id = $row['estandar_id'];
                     $queryEstandar = "select estandar FROM `$tabla_estandares` where id='$estandar_id'";
-                    $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error());
+                    $resultEstandar = mysqli_query($con_mysql,$queryEstandar)or die('ERROR:'.mysqli_error($con_mysql));
                     $rowEstandar = mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
                     echo $rowEstandar['estandar'];
                 echo '</td>';
@@ -281,7 +281,7 @@ if(isset($nombreProyecto)){
             //copiar el proyecto a otro agrupamiento
                 //consulta de agrupamientos para listar
                 $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
                 $num=mysqli_num_rows($result);
                 if($num>0){
                     echo '<select style="width:20%" id="selAgrupCopiaProyecto" name="selAgrupCopiaProyecto" onchange="copiaProyecto(\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\')">';

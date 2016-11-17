@@ -59,7 +59,7 @@ echo '<form id="formInformeEvaluacion" name="formInformeEvaluacion" >';
 //select con agrupamientos
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             echo '<select id="selAgrupInformeEvaluacion" name="selAgrupInformeEvaluacion">';
@@ -96,7 +96,7 @@ if(isset($idAgrupamiento)&&isset($fechaIni)&&isset($fechaFin)){
 
     //$query="SELECT distinct proyecto FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and fecha <='$fechaFin' and fecha >='$fechaIni'";
     $query="SELECT distinct proyecto FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and (fecha between '$fechaIniM' and '$fechaFinM')";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
     if($num>0){
         echo '<table style="margin:auto;width="90%;">';

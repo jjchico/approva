@@ -44,7 +44,7 @@ if(isset($_POST['estandar'])){
     $estandar = $_POST['estandar'];
     //insertamos en base de datos
     $query="INSERT INTO `$tabla_estandares` (`id`, `agrupamiento_id`, `estandar`) VALUES (NULL, '$id', '$estandar');";
-    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
 }
 
 //si hemos solicitado eliminar estándar de aprendizaje
@@ -52,14 +52,14 @@ if(isset($_POST['idEstandarEliminar'])){
     $idEstandarEliminar = $_POST['idEstandarEliminar'];
     //borramos de la base de datos
     $queryDelEstandar="DELETE FROM `$tabla_estandares` WHERE `$tabla_estandares`.id = '$idEstandarEliminar'";
-    $resultDelEstandar=mysqli_query($con_mysql,$queryDelEstandar)or die('ERROR:'.mysqli_error());
+    $resultDelEstandar=mysqli_query($con_mysql,$queryDelEstandar)or die('ERROR:'.mysqli_error($con_mysql));
 }
 //fin eliminar estándar de aprendizaje
 
 //select con agrupamientos
 //consulta de agrupamientos para listar
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
         if($num>0){
             echo '<p style="text-align:center;"><select id="selAgrup" name="selAgrup" onchange="listaEstandares()"></p>';
@@ -88,7 +88,7 @@ if(isset($_POST['idEstandarEliminar'])){
             if(isset($_POST['id'])){
                 //seleccionar estándares para el agrupamiento seleccionado
                 $query="SELECT * FROM `$tabla_estandares` where agrupamiento_id='$id'";
-                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+                $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
                 $num=mysqli_num_rows($result);
                 if($num>0){
                     for($a=0;$a<$num;$a++){

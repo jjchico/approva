@@ -13,11 +13,32 @@ You cand find a copy of the GNU General Public License in the "license" director
 
 You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+// Activa informes de error. Comentar para desactivar
+
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
+// Constantes configurables por el administrador
+
+// Servidor de la base de datos
 define('DB_SERVER', 'localhost');
+
+// Nombre de la base de datos
 define('DB_DATABASE', 'approva');
+
+// Prefijo para las tablas de la base de datos. Varias instancias de la
+// aplicación pueden usar la misma base de datos si usan prefijos diferentes
 define('DB_PREFIX', '001_');
-define('DB_MYSQL_USER', 'root');
+
+// Usuario para acceder a la base de datos. El usuario debe existir en el
+// servidor de base de datos y tener permisos para crear DB_DATABASE si no
+// esiste ya en el servidor. Se desaconseja el uso de 'root'.
+define('DB_MYSQL_USER', 'approva');
+
+// Clave del usuario en MySQL
 define('DB_MYSQL_PASSWORD', '');
+
 
 //// NO EDITAR DEBAJO DE ESTA LINEA ////
 

@@ -122,6 +122,17 @@ if(isset($_POST['idProyecto'])){
     $idProyecto = $_POST['idProyecto'];
 }
 
+//eliminar calificación
+        if(isset($_POST['delete'])&&($_POST['delete']=='yes')){
+            $query="delete from `$tabla_calificaciones` where proyecto_id = '$idProyecto'";//elimino calificación
+            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+            $query="delete from `$tabla_proyectos` where id = '$idProyecto'";//elimino proyecto ya que es único y no quiero que aparezca más
+            $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error());
+            if($result){
+                echo '<script>alert(\'Calificaciones Eliminadas\');</script>';
+            }
+        }
+
 
 //inicio formulario
 echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
@@ -232,6 +243,9 @@ echo '<form id="formCalificaEstandar" name="formCalificaEstandar">';
                         echo '</table>';
                         if(isset($idProyecto)&&($idProyecto=='N')){
                             echo '<br/><p style="text-align:center;"><a href="#" onclick="calificaEstandarNuevo2()">Grabar Calificaciones</a></p>';
+                        }else if(isset($idProyecto)){
+                            echo '<br/><p style="text-align:center;"><a href="#" onclick="calificaEstandar()">Grabar Calificaciones</a></p>';
+                            echo '<p style="text-align:center;"><a href="#" onclick="eliminaCalifEstandar()">Eliminar Calificaciones</a></p>';
                         }else{
                             echo '<br/><p style="text-align:center;"><a href="#" onclick="calificaEstandar()">Grabar Calificaciones</a></p>';
                         }

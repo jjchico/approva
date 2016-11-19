@@ -497,10 +497,33 @@ if(isset($_POST['idAgrupamientoElimina'])){
                 return;
             }else{
             //getting variables
-            var nombreAgrupmiento = $("#selAgrup option:selected").text();
+            var nombreAgrupamiento = $("#selAgrup option:selected").text();
             var nombreProyecto = $("#selProyecto option:selected").text();
             var stringForm = $("#formCalificaEstandar").serialize();
-            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupmiento+"&nombreProyecto="+nombreProyecto+"",stringForm,function(html){$("#center").html(html);});
+            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupamiento+"&nombreProyecto="+nombreProyecto+"",stringForm,function(html){$("#center").html(html);});
+            }//fin de else
+
+            //alert(stringForm);
+        }
+
+        function eliminaCalifEstandar(){
+            //validation
+            if($("#selAgrup").val()=='0'){
+                alert('Debe seleccionar un agrupamiento');
+                return;
+            }else if($("#selEstandarCreaProyecto").val()=='0'){
+                alert('Debe seleccionar un estándar de aprendizaje');
+                return;
+            }else{
+            //getting variables
+            var idAgrupamiento = $("#selAgrup").val();
+            var idEstandar = $("#selEstandarCreaProyecto").val();
+            var idProyecto = $("#selProyecto").val();
+                //alert(idAgrupamiento);alert(idEstandar);alert(idProyecto);
+            if( ! confirm("Va a esta calificación de manera permanente. ¿Desea continuar?") ) {
+				    return false;
+                }
+            $.post("califEstandar.php","idAgrupamiento="+idAgrupamiento+"&idEstandar="+idEstandar+"&idProyecto="+idProyecto+"&delete=yes",function(html){$("#center").html(html);});
             }//fin de else
 
             //alert(stringForm);
@@ -522,9 +545,9 @@ if(isset($_POST['idAgrupamientoElimina'])){
                 return;
             }else{
             //getting variables
-            var nombreAgrupmiento = $("#selAgrup option:selected").text();
+            var nombreAgrupamiento = $("#selAgrup option:selected").text();
             var stringForm = $("#formCalificaEstandar").serialize();
-            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupmiento+"",stringForm,function(html){$("#center").html(html);});
+            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupamiento+"",stringForm,function(html){$("#center").html(html);});
             }//fin de else
 
             //alert(stringForm);
@@ -543,9 +566,9 @@ if(isset($_POST['idAgrupamientoElimina'])){
                 return;
             }else{
             //getting variables
-            var nombreAgrupmiento = $("#selAgrup option:selected").text();
+            var nombreAgrupamiento = $("#selAgrup option:selected").text();
             var stringForm = $("#formCalificaEstandar").serialize();
-            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupmiento+"&nuevo=nuevo",stringForm,function(html){$("#center").html(html);});
+            $.post("califEstandar.php?nombreAgrupamiento="+nombreAgrupamiento+"&nuevo=nuevo",stringForm,function(html){$("#center").html(html);});
             }//fin de else
 
             //alert(stringForm);

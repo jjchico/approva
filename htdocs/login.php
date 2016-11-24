@@ -1,4 +1,4 @@
-<?php session_start();
+<?php
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -14,15 +14,17 @@ You cand find a copy of the GNU General Public License in the "license" director
 You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
 
+include("session.php");
+
 //if logout then destroy the session and redirect the user
 if(isset($_GET['logout']))
 {
 	unset($_SESSION['id']);
 	session_unset();
-    	session_destroy();
-    	session_write_close();
-    	setcookie(session_name(),'',0,'/');
-    	session_regenerate_id(true);
+    session_destroy();
+    session_write_close();
+    setcookie(session_name(),'',0,'/');
+    // session_regenerate_id(true);
 }
 
 ?>

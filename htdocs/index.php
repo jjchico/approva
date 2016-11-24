@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+include("session.php");
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -102,6 +103,7 @@ if(isset($_POST['username'])){
 if(empty($_SESSION['id'])){
 	header("Location:login.php");
 }
+
 /////////////////////////////////////////////////////////////////fin user
 
 /*OPERATIONS DATABASE////////////////////////////////////////////////////*/

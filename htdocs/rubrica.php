@@ -1,4 +1,4 @@
-<?php session_start();
+<?php //session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -13,6 +13,8 @@ You cand find a copy of the GNU General Public License in the "license" director
 
 You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+include("session.php");
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
@@ -40,7 +42,7 @@ $nombreProyecto = $_GET['nombreProyecto'];
 //datos del proyecto para presentar las rúbricas
 
 //montar tabla: por filas, los alumnos, por columnas, las casillas de la rúbrica
-$queryEstandares="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.peso FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and 
+$queryEstandares="SELECT `$tabla_estandares`.estandar,`$tabla_proyectos`.id,`$tabla_proyectos`.peso FROM `$tabla_estandares`,`$tabla_proyectos` WHERE `$tabla_proyectos`.proyecto = '$nombreProyecto' and
 `$tabla_proyectos`.agrupamiento_id = '$idAgrupamiento' and `$tabla_proyectos`.estandar_id = `$tabla_estandares`.id";
 $resultEstandares=mysqli_query($con_mysql,$queryEstandares)or die('ERROR:'.mysqli_error($con_mysql));
 $numEstandares=mysqli_num_rows($resultEstandares);

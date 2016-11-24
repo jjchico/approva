@@ -1,4 +1,4 @@
-<?php session_start();
+<?php //session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -8,15 +8,17 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+include("session.php");
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 echo '<h1>Ajustes</h1>';
@@ -53,7 +55,7 @@ if(isset($_POST['idAgrupamientoOrigen'])&&isset($_POST['idAgrupamientoDestino'])
                     }
                 //doy aviso
                 echo '<script>alert(\'Estándares Copiados. Compruebe que así es en la opción Estándares.\');</script>';
-                }    
+                }
 }//fin copiar estándares de aprendizaje
 
 //FIN ACCIONES
@@ -75,12 +77,12 @@ echo '<h3>Copiar estándares de aprendizaje</h3>';
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
-        if($num>0){            
+        if($num>0){
             echo '<select id="selAgrupOrigen" name="selAgrupOrigen">';
             echo '<option value="0">Seleccione Agrupamiento Origen</option>';
             for($o=0;$o<$num;$o++){
                 $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
-                echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';                              
+                echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
             }
             echo '</select>';
         }else{
@@ -95,12 +97,12 @@ print '<br/><br/>';
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
-        if($num>0){            
+        if($num>0){
             echo '<select id="selAgrupDestino" name="selAgrupDestino" onchange="copiaEstandares()">';
             echo '<option value="0">Seleccione Agrupamiento Destino</option>';
             for($d=0;$d<$num;$d++){
                 $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
-                echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';                              
+                echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
             }
             echo '</select>';
         }else{

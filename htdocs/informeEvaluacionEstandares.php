@@ -1,4 +1,4 @@
-<?php session_start();
+<?php //session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -8,15 +8,17 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+include("session.php");
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 date_default_timezone_set('Europe/Madrid');
@@ -60,7 +62,7 @@ echo '<form id="formInformeEvaluacionEstandares" name="formInformeEvaluacionEsta
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
-        if($num>0){            
+        if($num>0){
             echo '<select id="selAgrupInformeEvaluacion" name="selAgrupInformeEvaluacion">';
             echo '<option value="0">Seleccione Agrupamiento</option>';
             for($a=0;$a<$num;$a++){
@@ -69,7 +71,7 @@ echo '<form id="formInformeEvaluacionEstandares" name="formInformeEvaluacionEsta
                     echo '<option value="'.$row['id'].'" selected="selected">'.$row['agrupamiento'].'</option>';
                 }else{
                     echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
-                }                                
+                }
             }
             echo '</select>';
         }else{
@@ -89,14 +91,14 @@ if(isset($fechaFin)){
     echo '<p>Fin Período: <input type="text" id="fechaFin" name="fechaFin" onchange="listaEstandaresEvaluacion()"></p>';
 }
 
-//listado de proyectos realizado durante el período seleccionado 
+//listado de proyectos realizado durante el período seleccionado
 if(isset($idAgrupamiento)&&isset($fechaIni)&&isset($fechaFin)){
     //seleccionamos proyectos realizados
-    
+
     $query="SELECT distinct estandar_id FROM `$tabla_proyectos` where agrupamiento_id='$idAgrupamiento' and (fecha between '$fechaIniM' and '$fechaFinM')";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
     $num=mysqli_num_rows($result);
-    if($num>0){ 
+    if($num>0){
         echo '<table style="margin:auto;width="90%;">';
         echo '<tr><th>Acción</th><th>Estándares de aprendizaje trabajados en el período</th><th>Peso por categoría</th></tr>';
         for($p=0;$p<$num;$p++){

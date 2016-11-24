@@ -16,10 +16,13 @@ You should have received a copy of the GNU General Public License along with APP
 
 // Activa informes de error. Comentar para desactivar
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 
-// Constantes configurables por el administrador
+//// Constantes configurables por el administrador ////
+
+// Identificador
+define('APP_ID', '001');
 
 // Servidor de la base de datos
 define('DB_SERVER', 'localhost');
@@ -28,8 +31,9 @@ define('DB_SERVER', 'localhost');
 define('DB_DATABASE', 'approva');
 
 // Prefijo para las tablas de la base de datos. Varias instancias de la
-// aplicación pueden usar la misma base de datos si usan prefijos diferentes
-define('DB_PREFIX', '001_');
+// aplicación pueden usar la misma base de datos si usan prefijos diferentes.
+// De forma predeterminada se genera un prefijo basado en APP_ID
+define('DB_PREFIX', APP_ID . '_');
 
 // Usuario para acceder a la base de datos. El usuario debe existir en el
 // servidor de base de datos y tener permisos para crear DB_DATABASE si no
@@ -41,6 +45,12 @@ define('DB_MYSQL_PASSWORD', '');
 
 
 //// NO EDITAR DEBAJO DE ESTA LINEA ////
+
+// Nombre de la sesión. Un nombre de sesión específico permite tener varias
+// copias instaladas en el mismo servidor sin interferencias en el proceso
+// de autenticación
+
+define('SESSION_ID', 'APPROVASESSION' . '_' . APP_ID);
 
 // Nombres de las tablas de la base de datos
 

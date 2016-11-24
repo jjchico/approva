@@ -1,4 +1,4 @@
-<?php session_start();
+<?php //session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -13,6 +13,8 @@ You cand find a copy of the GNU General Public License in the "license" director
 
 You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+include("session.php");
 
 //config.php
 require_once('config.php');

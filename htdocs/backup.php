@@ -1,8 +1,10 @@
-<?php session_start();
+<?php //session_start();
+
+include("session.php");
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 //zona horaria por defecto
@@ -61,26 +63,26 @@ function backup_tables()
             $num_rows = mysqli_num_rows($result);
             $i_row = 0;
 
-            //$return.= 'DROP TABLE '.$table.';'; 
+            //$return.= 'DROP TABLE '.$table.';';
             $row2 = mysqli_fetch_row(mysqli_query($link,'SHOW CREATE TABLE '.$table));
-            $return.= "\n\n".$row2[1].";\n\n"; 
+            $return.= "\n\n".$row2[1].";\n\n";
 
             if ($num_rows !== 0) {
                 $row3 = mysqli_fetch_fields($result);
                 $return.= 'INSERT INTO '.$table.'( ';
-                foreach ($row3 as $th) 
-                { 
-                    $return.= '`'.$th->name.'`, '; 
+                foreach ($row3 as $th)
+                {
+                    $return.= '`'.$th->name.'`, ';
                 }
                 $return = substr($return, 0, -2);
                 $return.= ' ) VALUES';
 
-                for ($i = 0; $i < $num_fields; $i++) 
+                for ($i = 0; $i < $num_fields; $i++)
                 {
                     while($row = mysqli_fetch_row($result))
                     {
                         $return.="\n(";
-                        for($j=0; $j<$num_fields; $j++) 
+                        for($j=0; $j<$num_fields; $j++)
                         {
                             $row[$j] = addslashes($row[$j]);
                             $row[$j] = preg_replace("#\n#","\\n",$row[$j]);
@@ -91,7 +93,7 @@ function backup_tables()
                             $return.= ");"; // last row
                         } else {
                             $return.= "),"; // not last row
-                        }   
+                        }
                     }
                 }
             }

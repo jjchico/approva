@@ -1,4 +1,4 @@
-<?php session_start();
+<?php // session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 

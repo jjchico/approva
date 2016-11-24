@@ -1,4 +1,4 @@
-<?php session_start();
+<?php //session_start();
 /*
 This file is part of APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje).
 
@@ -8,15 +8,17 @@ APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is f
 (at your option) any later version.
 
 APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-	
+
 You cand find a copy of the GNU General Public License in the "license" directory.
 
-You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.  
+You should have received a copy of the GNU General Public License along with APPROVA; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
 */
+
+include("session.php");
 
 // if session is not set redirect the user
 if(empty($_SESSION['id'])){
-	header("Location:login.php");	
+	header("Location:login.php");
 }
 
 echo '<script>jQuery(document).ready(function($){$(\'#proyectoTable\').tableScroll({height:200});});</script>';
@@ -43,8 +45,8 @@ if(isset($_POST['delete'])){
 }
 
 //si hemos enviado formulario, grabamos
-if(isset($_GET['save'])){    
-    //recojo variables 
+if(isset($_GET['save'])){
+    //recojo variables
     $idAgrupamiento = $_POST['selAgrupCreaProyecto'];
     $nombreProyecto = $_POST['nombreProyecto'];
     $idEstandar = $_POST['selEstandarCreaProyecto'];
@@ -62,7 +64,7 @@ if(isset($_GET['save'])){
     `ccl`, `cmct`, `cd`, `caa`, `csyc`, `siep`, `cec`) VALUES (NULL, '$idAgrupamiento', '$idEstandar','$nombreProyecto',now(),'$numItems', '$pesoEstandar',
     '$ccl','$cmct','$cd','$caa','$csyc','$siep','$cec');";
     $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
-    
+
     if($result){
         echo '<script>alert("Se ha grabado la información en el proyecto. Puede darlo por concluido o seguir grabando en el mismo proyecto otro estándar de aprendizaje");</script>';
     }
@@ -125,7 +127,7 @@ echo '<form id="formNewProject" name="formNewProject">';
         $query="SELECT * FROM `$tabla_agrupamientos` order by `agrupamiento`";
         $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
         $num=mysqli_num_rows($result);
-        if($num>0){            
+        if($num>0){
             echo '<select id="selAgrupCreaProyecto" name="selAgrupCreaProyecto" onchange="listaEstandaresCreaProyecto()">';
             echo '<option value="0">Seleccione Agrupamiento</option>';
             for($a=0;$a<$num;$a++){
@@ -134,7 +136,7 @@ echo '<form id="formNewProject" name="formNewProject">';
                     echo '<option value="'.$row['id'].'" selected="selected">'.$row['agrupamiento'].'</option>';
                 }else{
                     echo '<option value="'.$row['id'].'">'.$row['agrupamiento'].'</option>';
-                }                                
+                }
             }
             echo '</select>';
         }else{
@@ -168,15 +170,15 @@ if(isset($nombreProyecto)){
             }
         echo '</select>';
         echo '<br/><br/>';
-        
+
         //el área de texto para presentar el estándar seleccionado
         echo '<textarea name="taEstandar" id="taEstandar" cols="146" rows="4"></textarea>';
-        
+
         //el peso del estándar en el proyecto
         echo '<br/><br/>';
         echo '<span>Peso del estándar (en tanto por ciento): </span>';
         echo '<input type="text" id="txtPesoEstandar" name="txtPesoEstandar" size="5" maxlength="5" />';
-        
+
         //los checkbox con las competencias clave
         echo '<br/><br/>';
         echo '<span>Competencias clave que se trabajarán:</span>';
@@ -203,16 +205,16 @@ if(isset($nombreProyecto)){
         echo '<span>CEC:</span>';
         echo '<input type="checkbox" id="cb_CEC" name="cb_CEC" />';
         echo ' | ';
-            
+
         //el número de ítems a proponer para trabajar este estándar
         echo '<br/><br/>';
         echo '<span>Número de ítems: </span>';
         echo '<input type="text" id="txtNumItems" name="txtNumItems" size="2" maxlength="2" />';
-            
+
         //el enlace para grabar
         echo '<br/><br/>';
         echo '<a href="#" onclick="saveProject()">Grabar Proyecto</a>';
-        
+
     }else{
         echo '<p>No hay estándares registrados</p>';
     }

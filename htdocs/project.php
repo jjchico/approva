@@ -268,7 +268,12 @@ if(isset($nombreProyecto)){
             echo '<a href="#" onclick="generaRubricaProyecto2(\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\')">Generar Rúbrica (modelo 2)</a>';
             echo '<br/><br/>';
             echo '<a href="#" onclick="goInformeProyecto(\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\')">';
-            echo 'Informe de Proyecto';
+            echo 'Informe de Proyecto (individual)';
+            echo '</a>';
+            echo '<br/>';
+            echo '<br/>';
+            echo '<a href="#" onclick="goInformeProyecto2(\''.$nombreProyecto.'\',\''.$idAgrupamiento.'\',\''.$num.'\')">';
+            echo 'Informe de Proyecto (listado)';
             echo '</a>';
             echo '<br/>';
             echo '<br/>';

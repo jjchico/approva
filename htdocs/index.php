@@ -208,6 +208,10 @@ if(isset($_POST['idAgrupamientoElimina'])){
             window.open("boletinProyecto.php?nombreProyecto="+nombreProyecto+"&idAgrupamiento="+idAgrupamiento+"");
         }
 
+        function goInformeProyecto2(nombreProyecto,idAgrupamiento,numEstandares){
+            window.open("boletinProyectoListado.php?nombreProyecto="+nombreProyecto+"&idAgrupamiento="+idAgrupamiento+"&numEstandares="+numEstandares+"");
+        }
+
         function generaRubricaProyecto(nombreProyecto,idAgrupamiento){
             window.open("rubrica.php?nombreProyecto="+nombreProyecto+"&idAgrupamiento="+idAgrupamiento+"");
         }

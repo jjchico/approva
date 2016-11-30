@@ -10,6 +10,9 @@ if(empty($_SESSION['id'])){
 //zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 
+//config
+require_once('config.php');
+
 //functions.php
 require_once('functions.php');
 
@@ -24,6 +27,7 @@ function backup_tables()
     $db_user = DB_MYSQL_USER;
     $db_pass = DB_MYSQL_PASSWORD;
     $db_name = DB_DATABASE;
+	$db_prefix = DB_PREFIX;
 
     //set the correct date for filename
     if (date('l') == $day_of_backup) {
@@ -37,16 +41,16 @@ function backup_tables()
     if (!file_exists($backup_path.$date.'-backup'.'.sql')) {
 
         //connect to db
-        $link = mysqli_connect($db_host,$db_user,$db_pass);
+        $link = mysqli_connect($db_host,$db_user,$db_pass, $db_name);
         mysqli_set_charset($link,'utf8');
-        mysqli_select_db($link,$db_name);
 
         //get all of the tables
         $tables = array();
         $result = mysqli_query($link, 'SHOW TABLES');
         while($row = mysqli_fetch_row($result))
         {
-            $tables[] = $row[0];
+			if(strncmp($row[0], $db_prefix, strlen($db_prefix)) == 0)
+				$tables[] = $row[0];
         }
 
         //disable foreign keys (to avoid errors)

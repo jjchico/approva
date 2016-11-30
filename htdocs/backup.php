@@ -8,6 +8,9 @@ if(empty($_SESSION['id'])){
 //zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 
+//config
+require('config.php');
+
 //functions.php
 require('functions.php');
 
@@ -16,6 +19,9 @@ backup_tables();
 // backup all tables in db
 function backup_tables()
 {
+    
+    
+    
     $day_of_backup = 'Monday'; //possible values: `Monday` `Tuesday` `Wednesday` `Thursday` `Friday` `Saturday` `Sunday`
     $backup_path = 'backup/'; //make sure it ends with "/"
     $db_host = DB_SERVER;
@@ -35,9 +41,10 @@ function backup_tables()
     if (!file_exists($backup_path.$date.'-backup'.'.sql')) {
 
         //connect to db
-        $link = mysqli_connect($db_host,$db_user,$db_pass);
+        //$link = mysqli_connect($db_host,$db_user,$db_pass);
+        $link = mysqli_connect($db_host,$db_user,$db_pass, $db_name);
         mysqli_set_charset($link,'utf8');
-        mysqli_select_db($link,$db_name);
+        //mysqli_select_db($link,$db_name);
 
         //get all of the tables
         $tables = array();

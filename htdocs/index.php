@@ -228,6 +228,10 @@ if(isset($_POST['idAgrupamientoElimina'])){
             $.post("informeEvaluacionEstandares.php",function(html){$("#center").html(html);});
         }
 
+        function goRubricaEstandares(){
+            $.post("rubricaEstandares.php",function(html){$("#center").html(html);});
+        }
+
         function listaEstandares(){
             //valor del select
             var idAgrup = $("#selAgrup").val();
@@ -624,6 +628,29 @@ if(isset($_POST['idAgrupamientoElimina'])){
             $.post("informeEvaluacionEstandares.php","idAgrupamiento="+idAgrupamiento+"&fechaIni="+fechaIni+"&fechaFin="+fechaFin+"",function(html){$("#center").html(html);});
         }
 
+        function listaRubricaEvaluacion(){
+            //validación
+            var idAgrupamiento = $("#selAgrupInformeEvaluacion").val();
+            var nombreAgrupamiento = $("#selAgrupInformeEvaluacion option:selected").text();
+            var fechaIni = $("#fechaIni").val();
+            var fechaFin = $("#fechaFin").val();
+            if(idAgrupamiento=='0'){
+                alert("Debe seleccionar un agrupamiento");
+                $("#fechaFin").val('');
+                return;
+            }else if(fechaIni==''){
+                alert("Debe seleccionar una fecha inicial");
+                $("#fechaFin").val('');
+                return;
+            }else if(fechaFin==''){
+                alert("Debe seleccionar una fecha final");
+                $("#fechaFin").val('');
+                return;
+            }
+            //fin validación
+            window.open("boletinRubricaEstandares.php?idAgrupamiento="+idAgrupamiento+"&nombreAgrupamiento="+nombreAgrupamiento+"&fechaIni="+fechaIni+"&fechaFin="+fechaFin+"");
+        }
+
         function asignaPeso(num){
             //número de cb clicados en el formulario
             var numberOfChecked = $('input:checkbox:checked').length;
@@ -644,7 +671,7 @@ if(isset($_POST['idAgrupamientoElimina'])){
             for(var q in arrayPesos) {
                 total += arrayPesos[q];
             }
-            $("#txtTotalPeso").val(total);
+            $("#txtTotalPeso").val(Math.round(total));
         }
 
         function generaInformeEval(){
@@ -857,6 +884,7 @@ if(isset($_POST['idAgrupamientoElimina'])){
             <li><a href="#" onclick="goCalifEstandar()">Calificar Estándar</a></li>
             <li><a href="#" onclick="goInformeEvaluacion()">Informes de Evaluación por Proyectos</a></li>
             <li><a href="#" onclick="goInformeEvaluacion2()">Informes de Evaluación por Estándares</a></li>
+            <li><a href="#" onclick="goRubricaEstandares()">Rúbricas Agrupadas</a></li>
             <li><a href="#" onclick="">Programación de Aula</a></li>
             <li><a href="#" onclick="goAjustes()">Ajustes</a></li>
             <li><a href="#" onclick="logout()"><img src="css/images/logout.png" title="Salir" /></a></li>

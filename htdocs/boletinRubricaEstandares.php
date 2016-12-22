@@ -123,6 +123,7 @@ for($a=0;$a<count($alum);$a++){
                 $rowEstandar=mysqli_fetch_array($resultEstandar,MYSQLI_ASSOC);
                 echo '<td>'.$rowEstandar['estandar'].'</td>';
                 //buscamos calificaciones para cada proyecto
+				$califCelda = [];
                 for($p=0;$p<count($arrayNombreProyecto);$p++){
                     //consulta para ver si hay calificación
                     $nombreProyectoCalif = $arrayNombreProyecto[$p];

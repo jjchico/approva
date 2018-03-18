@@ -34,60 +34,61 @@ if (!$con_mysql)
   }
 
 
-//si hemos solicitado grabar notas/////////////////////////////////////////////////////////////////////////
+//si hemos solicitado grabar notas////////////////////////////////////////////
 if(isset($_POST['stringArrayIdProyecto'])){
 
-        //recogemos nombre del proyecto
-        $nombreProyecto = $_POST['nombreProyecto'];
+    //recogemos nombre del proyecto
+    $nombreProyecto = $_POST['nombreProyecto'];
 
-        //recogemos id del agrupamiento
-        $idAgrupamiento = $_POST['idAgrupamiento'];
+    //recogemos id del agrupamiento
+    $idAgrupamiento = $_POST['idAgrupamiento'];
 
-        //recogemos array con los id de proyecto
-        $stringArrayIdProyecto = ($_POST['stringArrayIdProyecto']);
-        $arrayIdProyecto = explode('@',$stringArrayIdProyecto);
+    //recogemos array con los id de proyecto
+    $stringArrayIdProyecto = ($_POST['stringArrayIdProyecto']);
+    $arrayIdProyecto = explode('@',$stringArrayIdProyecto);
 
-        //seleccionamos alumnado del agrupamiento
-        $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
-        $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
-        $num=mysqli_num_rows($result);
-        for($a=0;$a<$num;$a++){
-            $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-            $idAlumno = $row['id'];
+    //seleccionamos alumnado del agrupamiento
+    $query="SELECT * FROM `$tabla_alumnado` where agrupamiento_id = '$idAgrupamiento' order by alumno";
+    $result=mysqli_query($con_mysql,$query)or die('ERROR:'.mysqli_error($con_mysql));
+    $num=mysqli_num_rows($result);
+    for($a=0;$a<$num;$a++){
+        $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+        $idAlumno = $row['id'];
 
-            //ya tenemos alumno por alumno, vamos a ir insertando en la base de datos
+        // ya tenemos alumno por alumno, vamos a ir insertando en la
+		// base de datos
 
-            //recogemos calificación y grabamos
-            $numEstandares = count($arrayIdProyecto);
-            for($n=0;$n<$numEstandares;$n++){
-                //echo $arrayIdProyecto[$n];
-                if(isset($_POST['txt_'.$idAlumno.'_'.$n.''])&&$_POST['txt_'.$idAlumno.'_'.$n.'']<>""){
-                    $calificacion = $_POST['txt_'.$idAlumno.'_'.$n.''];
-                    //compruebo si ya tiene nota
-                    $querySelect = "select id FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$arrayIdProyecto[$n]' and
-                    proyecto='$nombreProyecto'";
-                    $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error($con_mysql));
-                    $numSelect = mysqli_num_rows($resultSelect);
-                    //si hay nota, edito
-                    if($numSelect>0){
-                        $rowSelect = mysqli_fetch_array($resultSelect,MYSQLI_ASSOC);
-                        $idSelect = $rowSelect['id'];
-                        $queryUpdate = "update `$tabla_calificaciones` set calificacion = '$calificacion' where id = '$idSelect'";
-                        $resultUpdate = mysqli_query($con_mysql,$queryUpdate)or die('ERROR:'.mysqli_error($con_mysql));
-
-
-                    }else{//si no hay nota, inserto
-                        $queryInsert="insert into `$tabla_calificaciones` values(NULL,'$idAlumno','$arrayIdProyecto[$n]','$nombreProyecto','$calificacion',now())";
-                        $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error($con_mysql));
-
-                    }
-
-                }//fin hay nota
-            }//fin for estándares para un alumno
-        }//fin for alumnos
-        echo '<script>alert(\'Calificaciones Grabadas\');</script>';
+        //recogemos calificación y grabamos
+        $numEstandares = count($arrayIdProyecto);
+        for($n=0;$n<$numEstandares;$n++){
+			if(isset($_POST['txt_'.$idAlumno.'_'.$n.''])) {
+                $calificacion = $_POST['txt_'.$idAlumno.'_'.$n.''];
+			}
+            //compruebo si ya tiene nota
+            $querySelect = "select id FROM `$tabla_calificaciones` where alumno_id='$idAlumno' and proyecto_id='$arrayIdProyecto[$n]' and proyecto='$nombreProyecto'";
+            $resultSelect = mysqli_query($con_mysql,$querySelect)or die('ERROR:'.mysqli_error($con_mysql));
+            $numSelect = mysqli_num_rows($resultSelect);
+            // si hay nota, edito
+            if($numSelect>0){
+                $rowSelect = mysqli_fetch_array($resultSelect,MYSQLI_ASSOC);
+                $idSelect = $rowSelect['id'];
+				if($calificacion <> "") { // actualizo nueva calificación
+	                $queryUpdate = "update `$tabla_calificaciones` set calificacion = '$calificacion' where id = '$idSelect'";
+	                $resultUpdate = mysqli_query($con_mysql,$queryUpdate) or die('ERROR:'.mysqli_error($con_mysql));
+				} else { // borro calificación anterior
+					$queryDelete = "delete from `$tabla_calificaciones`
+					  where id = '$idSelect' limit 1";
+					$resultDelete = mysqli_query($con_mysql,$queryDelete) or die('ERROR:'.mysqli_error($con_mysql));
+				}
+            } else if($calificacion <> "") { // si no hay nota, inserto
+                $queryInsert="insert into `$tabla_calificaciones` values(NULL,'$idAlumno','$arrayIdProyecto[$n]','$nombreProyecto','$calificacion',now())";
+                $resultInsert=mysqli_query($con_mysql,$queryInsert)or die('ERROR:'.mysqli_error($con_mysql));
+            }
+        } // fin for estándares para un alumno
+    } // fin for alumnos
+    echo '<script>alert(\'Calificaciones Grabadas\');</script>';
 }
-//fin grabar notas////////////////////////////////////////////////////////////////////////////////////////
+//fin grabar notas//////////////////////////////////////////////////////
 
 $idAgrupamiento = $_GET['idAgrupamiento'];
 $nombreProyecto = $_GET['nombreProyecto'];

@@ -1,5 +1,7 @@
 # README #
 
+**Repositorio trasladado a: https://gitlab.com/jjchico/approva**
+
 Este repositorio es una copia no oficial de APPROVA (Sistema de Evaluación por Proyectos y Estándares de Aprendizaje) desarrollado por Ramón Castro Pérez.
 
 Para más información visite la [web oficial](http://siestta.org/).
